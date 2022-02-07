@@ -22,7 +22,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<ReadInstrutorDto> listarInstrutores()
+        public List<ReadInstrutorDto> ListarInstrutores()
         {
             List<Instrutor> instrutores = _context.Instrutores.ToList();
             if (instrutores == null) return null;
@@ -30,7 +30,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET ID
-        public ReadInstrutorDto recuperarInstrutorPorId(int id)
+        public ReadInstrutorDto RecuperarInstrutorPorId(int id)
         {
             Instrutor instrutor = _context.Instrutores.FirstOrDefault(instrutor => instrutor.Id == id);
             if (instrutor == null) return null;
@@ -39,7 +39,7 @@ namespace API_Calendario_CEC.Services
 
 
         //POST
-        public Instrutor criarInstrutor(CreateInstrutorDto createInstrutorDto)
+        public Instrutor CriarInstrutor(CreateInstrutorDto createInstrutorDto)
         {
             Instrutor instrutor = _mapper.Map<Instrutor>(createInstrutorDto);
             _context.Add(instrutor);
@@ -48,7 +48,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //PUT
-        public Result atualizarInstrutor(int id, UpdateInstrutorDto updateInstrutorDto)
+        public Result AtualizarInstrutor(int id, UpdateInstrutorDto updateInstrutorDto)
         {
             Instrutor instrutor = _context.Instrutores.FirstOrDefault(instrutor => instrutor.Id == id);
             if (instrutor == null) return Result.Fail("Instrutor não encontrado");
@@ -58,7 +58,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //DELETE
-        public Result apagarInstrutor(int id)
+        public Result ApagarInstrutor(int id)
         {
             Instrutor instrutor = _context.Instrutores.FirstOrDefault(instrutor => instrutor.Id == id);
             if (instrutor == null) return Result.Fail("Instrutor não encontrado!");
