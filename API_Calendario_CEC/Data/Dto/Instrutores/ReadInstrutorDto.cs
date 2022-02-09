@@ -5,6 +5,7 @@ namespace API_Calendario_CEC.Data.Dto
 {
     public class ReadInstrutorDto
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
 
         public string Abreviacao { get; set; }
