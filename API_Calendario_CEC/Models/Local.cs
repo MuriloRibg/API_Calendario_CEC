@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace API_Calendario_CEC.Models
 {
@@ -9,12 +11,15 @@ namespace API_Calendario_CEC.Models
         [Required]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "O campo nome é obrigatório!")]
+        [Required(ErrorMessage = "O campo Nome é obrigatório!")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "O campo capacidade é obrigatório!")]
+        [Required(ErrorMessage = "O campo Capacidade é obrigatório!")]
         public int Capacidade { get; set; }
 
         public bool Sistemas { get; set; }
+
+        [JsonIgnore]
+        public virtual List<Reserva> Reservas { get; set; }
     }
 }
