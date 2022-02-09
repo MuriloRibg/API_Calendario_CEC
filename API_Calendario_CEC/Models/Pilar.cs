@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -27,6 +26,6 @@ namespace API_Calendario_CEC.Models
         public virtual List<Disciplina> Disciplinas { get; set; }
 
         [JsonIgnore]
-        public virtual List<PilaresInstrutor> PilaresInstrutor { get; set; }
+        public virtual List<Instrutor> Instrutor { get; set; }
     }
 }

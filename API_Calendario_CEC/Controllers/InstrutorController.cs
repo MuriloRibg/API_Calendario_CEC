@@ -4,7 +4,6 @@ using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
 using Microsoft.AspNetCore.Mvc;
 using FluentResults;
-using System.Web.Http.Cors;
 
 namespace API_Calendario_CEC.Controllers
 {

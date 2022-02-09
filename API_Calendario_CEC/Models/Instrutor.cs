@@ -25,8 +25,11 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Disponibilidade é obrigatório!")]
         public string Disponibilidade { get; set; }
 
+        [Required(ErrorMessage = "O campo Disponibilidade é obrigatório!")]
+        public int Id_Pilar { get; set; }
+
         [JsonIgnore]
-        public virtual List<PilaresInstrutor> PilaresInstrutor { get; set; }
+        public virtual Pilar Pilar { get; set; }
 
         [JsonIgnore]
         public virtual List<Evento> Eventos { get; set; }

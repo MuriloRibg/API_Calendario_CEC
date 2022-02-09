@@ -13,6 +13,11 @@ namespace API_Calendario_CEC.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Instrutor>()
+                .HasOne(instrutor => instrutor.Pilar)
+                .WithMany(pilar => pilar.Instrutor)
+                .HasForeignKey(instrutor => instrutor.Id_Pilar);
+
             builder.Entity<Turma>()
                 .HasOne(turma => turma.Pilar)
                 .WithMany(pilar => pilar.Turmas)
@@ -27,16 +32,6 @@ namespace API_Calendario_CEC.Data
                 .HasOne(reserva => reserva.Local)
                 .WithMany(local => local.Reservas)
                 .HasForeignKey(reserva => reserva.Id_Local);
-
-            builder.Entity<PilaresInstrutor>()
-                .HasOne(pilaresInstrutor => pilaresInstrutor.Pilar)
-                .WithMany(pilar => pilar.PilaresInstrutor)
-                .HasForeignKey(pilaresInstrutor => pilaresInstrutor.Id_Pilar);
-
-            builder.Entity<PilaresInstrutor>()
-                .HasOne(pilaresInstrutor => pilaresInstrutor.Instrutor)
-                .WithMany(instrutor => instrutor.PilaresInstrutor)
-                .HasForeignKey(pilaresInstrutor => pilaresInstrutor.Id_Instrutor);
 
             builder.Entity<Reserva>()
                 .HasMany(reserva => reserva.Aulas)
@@ -78,6 +73,5 @@ namespace API_Calendario_CEC.Data
         public DbSet<Reserva> Reservas { get; set; }
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<Aula> Aulas { get; set; }
-        public DbSet<PilaresInstrutor> PilaresInstrutores { get; set; }
     }
 }
