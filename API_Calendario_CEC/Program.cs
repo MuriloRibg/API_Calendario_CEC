@@ -21,6 +21,9 @@ namespace API_Calendario_CEC
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureAppConfiguration((context, build) =>
+                {
+                    build.AddUserSecrets<Program>();
                 });
     }
 }

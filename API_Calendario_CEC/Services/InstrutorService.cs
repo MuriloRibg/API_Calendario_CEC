@@ -41,10 +41,17 @@ namespace API_Calendario_CEC.Services
         //POST
         public Instrutor CriarInstrutor(CreateInstrutorDto createInstrutorDto)
         {
-            Instrutor instrutor = _mapper.Map<Instrutor>(createInstrutorDto);
-            _context.Add(instrutor);
-            _context.SaveChanges();
-            return instrutor;
+            Instrutor instrutorCadastrado = _context
+                .Instrutores
+                .FirstOrDefault(instrutor => instrutor.Email.ToUpper() == createInstrutorDto.Email.ToUpper());
+            if(instrutorCadastrado != null)
+            {
+                Instrutor instrutor = _mapper.Map<Instrutor>(createInstrutorDto);
+                _context.Add(instrutor);
+                _context.SaveChanges();
+                return instrutor;
+            }
+            return null;
         }
 
         //PUT
@@ -54,7 +61,7 @@ namespace API_Calendario_CEC.Services
             if (instrutor == null) return Result.Fail("Instrutor não encontrado");
             _mapper.Map(updateInstrutorDto, instrutor); //Atualizando o instrutor;
             _context.SaveChanges();
-            return Result.Ok();
+            return Result.Ok().WithSuccess("Instrutor atualizado com sucesso!");
         }
 
         //DELETE
@@ -64,7 +71,7 @@ namespace API_Calendario_CEC.Services
             if (instrutor == null) return Result.Fail("Instrutor não encontrado!");
             _context.Remove(instrutor);
             _context.SaveChanges();
-            return Result.Ok();
+            return Result.Ok().WithSuccess("Instrutor apagado com sucesso!");
         }        
     }
 }

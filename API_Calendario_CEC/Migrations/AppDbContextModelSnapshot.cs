@@ -196,6 +196,12 @@ namespace API_Calendario_CEC.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime>("HoraFim")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("HoraInicio")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("Id_Local")
                         .HasColumnType("int");
 

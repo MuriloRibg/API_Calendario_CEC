@@ -17,6 +17,7 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Capacidade é obrigatório!")]
         public int Capacidade { get; set; }
 
+        [Required(ErrorMessage = "O campo Sistemas é obrigatório!")]
         public bool Sistemas { get; set; }
 
         [JsonIgnore]

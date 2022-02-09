@@ -19,7 +19,7 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Abreviação é obrigatório!")]
         public string Abreviacao { get; set; }
 
-        [Required(ErrorMessage = "O campo Email é obrigatório!")]
+        [Required(ErrorMessage = "O campo Email é obrigatório!")] 
         public string Email { get; set; }
 
         [Required(ErrorMessage = "O campo Disponibilidade é obrigatório!")]

@@ -10,14 +10,14 @@ namespace API_Calendario_CEC.Models
         [Required]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo Id_Instrutor é obrigatório!")]
         public int Id_Instrutor { get; set; }
 
-        public virtual Instrutor Instrutor { get; set; }
+        [Required(ErrorMessage = "O campo Id_Reserva é obrigatório!")]
+        public int Id_Reserva { get; set; }
 
-        [JsonIgnore]
         public virtual Reserva Reserva { get; set; }
 
-        public int Id_Reserva { get; set; }
+        public virtual Instrutor Instrutor { get; set; }
     }
 }

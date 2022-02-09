@@ -57,6 +57,5 @@ namespace API_Calendario_CEC.Controllers
             if (result.IsFailed) return NotFound(result.Reasons);
             return Ok();
         }
-
     }
 }
