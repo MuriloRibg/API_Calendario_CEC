@@ -37,6 +37,7 @@ namespace API_Calendario_CEC
             //Fazendo a injeção dos Services;
             services.AddScoped<InstrutorService, InstrutorService>();
             services.AddScoped<TurmaService, TurmaService>();
+            services.AddScoped<LocalService, LocalService>();
 
             //Injetando o AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
