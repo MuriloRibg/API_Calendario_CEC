@@ -8,7 +8,7 @@ namespace API_Calendario_CEC.Data.Dto.Disciplinas
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public virtual Pilar Pilar { get; set; }
+        public string Pilar { get; set; }
         [JsonIgnore]
         public virtual List<Aula> Aulas { get; set; }
     }

@@ -23,11 +23,6 @@ namespace API_Calendario_CEC.Data
                 .WithMany(pilar => pilar.Turmas)
                 .HasForeignKey(turma => turma.Id_Pilar);
 
-            builder.Entity<Disciplina>()
-                .HasOne(disciplina => disciplina.Pilar)
-                .WithMany(pilar => pilar.Disciplinas)
-                .HasForeignKey(disciplina => disciplina.Id_Pilar);
-
             builder.Entity<Reserva>()
                 .HasOne(reserva => reserva.Local)
                 .WithMany(local => local.Reservas)

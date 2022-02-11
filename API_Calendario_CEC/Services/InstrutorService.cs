@@ -44,10 +44,11 @@ namespace API_Calendario_CEC.Services
             Instrutor instrutorCadastrado = _context
                 .Instrutores
                 .FirstOrDefault(instrutor => instrutor.Email.ToUpper() == createInstrutorDto.Email.ToUpper());
-            if(instrutorCadastrado != null)
+            if(instrutorCadastrado == null)
             {
                 Instrutor instrutor = _mapper.Map<Instrutor>(createInstrutorDto);
-                _context.Add(instrutor);
+
+                _context.Add(instrutor);    
                 _context.SaveChanges();
                 return instrutor;
             }

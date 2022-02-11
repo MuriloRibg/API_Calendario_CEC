@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Calendario_CEC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220209172557_RelacionamentoInstrutorPilar")]
-    partial class RelacionamentoInstrutorPilar
+    [Migration("20220211185738_Tabelas_relacionamentos")]
+    partial class Tabelas_relacionamentos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,16 +56,15 @@ namespace API_Calendario_CEC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Id_Pilar")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Pilar")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasIndex("Id_Pilar");
+                    b.HasKey("Id");
 
                     b.ToTable("Disciplinas");
                 });
@@ -261,17 +260,6 @@ namespace API_Calendario_CEC.Migrations
                     b.Navigation("Turma");
                 });
 
-            modelBuilder.Entity("API_Calendario_CEC.Models.Disciplina", b =>
-                {
-                    b.HasOne("API_Calendario_CEC.Models.Pilar", "Pilar")
-                        .WithMany("Disciplinas")
-                        .HasForeignKey("Id_Pilar")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pilar");
-                });
-
             modelBuilder.Entity("API_Calendario_CEC.Models.Evento", b =>
                 {
                     b.HasOne("API_Calendario_CEC.Models.Instrutor", "Instrutor")
@@ -343,8 +331,6 @@ namespace API_Calendario_CEC.Migrations
 
             modelBuilder.Entity("API_Calendario_CEC.Models.Pilar", b =>
                 {
-                    b.Navigation("Disciplinas");
-
                     b.Navigation("Instrutor");
 
                     b.Navigation("Turmas");

@@ -14,10 +14,8 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Nome é obrigatório!")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "O campo Id_Pilar é obrigatório!")]
-        public int Id_Pilar { get; set; }
-
-        public virtual Pilar Pilar { get; set; }
+        [Required(ErrorMessage = "O campo Pilar é obrigatório!")]
+        public string Pilar { get; set; }
 
         [JsonIgnore]
         public virtual List<Aula> Aulas { get; set; }

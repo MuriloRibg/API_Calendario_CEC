@@ -5,10 +5,6 @@ namespace API_Calendario_CEC.Data.Dto
 {
     public class CreateInstrutorDto
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "O campo nome é obrigatório")]
         [MinLength(3, ErrorMessage = "O campo nome deve possuir no mínimo de 5 letras!")]
         [MaxLength(100, ErrorMessage = "O campo nome deve possuir no máximo de 100 letras!")]
@@ -23,7 +19,7 @@ namespace API_Calendario_CEC.Data.Dto
 
         public string Disponibilidade { get; set; }
 
-        [Required(ErrorMessage = "O campo Email é obrigatório!")]
-        public int Id_Instrutor { get; set; }
+        [Required(ErrorMessage = "O campo Id_Pilar é obrigatório!")]
+        public int Id_Pilar { get; set; }
     }
 }

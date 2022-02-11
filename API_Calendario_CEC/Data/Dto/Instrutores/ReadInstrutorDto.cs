@@ -1,4 +1,5 @@
-﻿using System;
+﻿using API_Calendario_CEC.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace API_Calendario_CEC.Data.Dto
@@ -13,7 +14,6 @@ namespace API_Calendario_CEC.Data.Dto
         public string Email { get; set; }
         
         public string Disponibilidade { get; set; }
-
-        public int Id_Instrutor { get; set; }
+        public virtual Pilar Pilar { get; set; }
     }
 }
