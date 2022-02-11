@@ -3,10 +3,6 @@ using System.ComponentModel.DataAnnotations;
 namespace API_Calendario_CEC.Data.Dto.Locais {
     public class CreateLocaisDto {
         
-        [Key]
-        [Required]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "O campo Nome é obrigatório!")]
         [MinLength(3, ErrorMessage = "O campo Nome deve possuir no mínimo de 5 letras!")]
         [MaxLength(50, ErrorMessage = "O campo nome deve possuir no máximo de 50 letras!")]
@@ -17,6 +13,5 @@ namespace API_Calendario_CEC.Data.Dto.Locais {
 
         [Required(ErrorMessage = "O campo Sistemas é obrigatório!")]
         public bool Sistemas { get; set; }
-        
     }
 }
