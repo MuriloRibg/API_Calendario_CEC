@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -18,6 +19,8 @@ namespace API_Calendario_CEC.Models
 
         [Required(ErrorMessage = "O campo Cor é obrigatório!")]
         public string Cor { get; set; }
+
+        public DateTime? DeleteAt { get; set; }
 
         [JsonIgnore]
         public virtual List<Turma> Turmas { get; set; }

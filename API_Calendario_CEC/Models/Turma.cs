@@ -22,6 +22,8 @@ namespace API_Calendario_CEC.Models
 
         public virtual Pilar Pilar { get; set; }
 
+        public DateTime? DeleteAt { get; set; }
+
         [JsonIgnore]
         public virtual List<Aula> Aulas { get; set; }        
     }

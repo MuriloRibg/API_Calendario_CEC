@@ -46,7 +46,7 @@ namespace API_Calendario_CEC.Controllers
         {
             Result result = _instrutorService.AtualizarInstrutor(id, updateInstrutorDto);
             if (result.IsFailed) return NotFound(result.Reasons);
-            return Ok();
+            return Ok(result.Reasons);
         }
 
         [HttpDelete("{id}")]
@@ -54,8 +54,15 @@ namespace API_Calendario_CEC.Controllers
         {
             Result result = _instrutorService.ApagarInstrutor(id);
             if (result.IsFailed) return NotFound(result.Reasons);
-            return Ok();
+            return Ok(result.Reasons);
         }
 
+        [HttpPatch("{id}")]
+        public IActionResult RestaurarInstrutorPorID(int id)
+        {
+            Result result = _instrutorService.RestaurarInstrutorPorID(id);
+            if (result.IsFailed) return NotFound(result.Reasons);
+            return Ok(result.Reasons);
+        }
     }
 }

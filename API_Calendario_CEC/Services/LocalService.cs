@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using API_Calendario_CEC.Data;
@@ -19,14 +20,17 @@ namespace API_Calendario_CEC.Services {
 
         //GET
         public List<ReadLocaisDto> ListarLocais() {
-            List<Local> locais =_context.Locais.ToList();
+            List<Local> locais =_context.Locais
+                .Where(instrutor => instrutor.DeleteAt == null)
+                .ToList();
             if (locais == null) return null;
             return _mapper.Map<List<ReadLocaisDto>>(locais);
         }
         
         //GET ID
         public ReadLocaisDto RecuperarLocalPorId(int id) {
-            Local local = _context.Locais.FirstOrDefault(local => local.Id == id);
+            Local local = _context.Locais
+                .FirstOrDefault(local => local.Id == id && local.DeleteAt == null);
             if (local == null) return null;
             return _mapper.Map<ReadLocaisDto>(local);
         }
@@ -52,7 +56,7 @@ namespace API_Calendario_CEC.Services {
         public Result ApagarLocal(int id) {
             Local local = _context.Locais.FirstOrDefault(local => local.Id == id);
             if (local == null) return Result.Fail("Local não encontrado");
-            _context.Remove(local);
+            local.DeleteAt = DateTime.Now;
             _context.SaveChanges();
             return Result.Ok().WithSuccess("Local apagado com sucesso!");
         }

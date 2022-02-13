@@ -38,6 +38,7 @@ namespace API_Calendario_CEC.Controllers
         [HttpPost]
         public IActionResult CriaDisciplina([FromBody] CreateDisciplinaDto disciplinaDto)
         {
+            Console.WriteLine(disciplinaDto);
             Disciplina disciplina = _disciplinaService.CriaDisciplina(disciplinaDto);
             return CreatedAtAction(nameof(RecuperarDisciplinaPorId), new { Id = disciplina.Id }, disciplina);
         }

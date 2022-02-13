@@ -24,7 +24,10 @@ namespace API_Calendario_CEC.Services
         //GET
         public List<ReadInstrutorDto> ListarInstrutores()
         {
-            List<Instrutor> instrutores = _context.Instrutores.ToList();
+            List<Instrutor> instrutores = _context.Instrutores
+                .Where(instrutor => instrutor.DeleteAt == null)
+                .ToList();
+            
             if (instrutores == null) return null;
             return _mapper.Map<List<ReadInstrutorDto>>(instrutores);
         }
@@ -32,7 +35,9 @@ namespace API_Calendario_CEC.Services
         //GET ID
         public ReadInstrutorDto RecuperarInstrutorPorId(int id)
         {
-            Instrutor instrutor = _context.Instrutores.FirstOrDefault(instrutor => instrutor.Id == id);
+            Instrutor instrutor = _context.Instrutores
+                .FirstOrDefault(instrutor => instrutor.Id == id && instrutor.DeleteAt == null);
+
             if (instrutor == null) return null;
             return _mapper.Map<ReadInstrutorDto>(instrutor); 
         }
@@ -44,6 +49,7 @@ namespace API_Calendario_CEC.Services
             Instrutor instrutorCadastrado = _context
                 .Instrutores
                 .FirstOrDefault(instrutor => instrutor.Email.ToUpper() == createInstrutorDto.Email.ToUpper());
+
             if(instrutorCadastrado == null)
             {
                 Instrutor instrutor = _mapper.Map<Instrutor>(createInstrutorDto);
@@ -58,7 +64,9 @@ namespace API_Calendario_CEC.Services
         //PUT
         public Result AtualizarInstrutor(int id, UpdateInstrutorDto updateInstrutorDto)
         {
-            Instrutor instrutor = _context.Instrutores.FirstOrDefault(instrutor => instrutor.Id == id);
+            Instrutor instrutor = _context.Instrutores
+                .FirstOrDefault(instrutor => instrutor.Id == id);
+
             if (instrutor == null) return Result.Fail("Instrutor não encontrado");
             _mapper.Map(updateInstrutorDto, instrutor); //Atualizando o instrutor;
             _context.SaveChanges();
@@ -68,11 +76,25 @@ namespace API_Calendario_CEC.Services
         //DELETE
         public Result ApagarInstrutor(int id)
         {
-            Instrutor instrutor = _context.Instrutores.FirstOrDefault(instrutor => instrutor.Id == id);
+            Instrutor instrutor = _context.Instrutores
+                .FirstOrDefault(instrutor => instrutor.Id == id);
+
             if (instrutor == null) return Result.Fail("Instrutor não encontrado!");
-            _context.Remove(instrutor);
+            instrutor.DeleteAt = DateTime.Now;
             _context.SaveChanges();
             return Result.Ok().WithSuccess("Instrutor apagado com sucesso!");
-        }        
+        }
+
+        //PUT restaurar
+        public Result RestaurarInstrutorPorID(int id)
+        {
+            Instrutor instrutor = _context.Instrutores
+                .FirstOrDefault(instrutor => instrutor.Id == id);
+
+            if (instrutor == null) return Result.Fail("Instrutor não encontrado!");
+            instrutor.DeleteAt = null;
+            _context.SaveChanges();
+            return Result.Ok().WithSuccess("Instrutor restaurado com sucesso!");
+        }
     }
 }

@@ -20,6 +20,8 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Sistemas é obrigatório!")]
         public bool Sistemas { get; set; }
 
+        public DateTime? DeleteAt { get; set; }
+
         [JsonIgnore]
         public virtual List<Reserva> Reservas { get; set; }
     }

@@ -3,14 +3,16 @@ using System;
 using API_Calendario_CEC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API_Calendario_CEC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220213131249_ColumDeleteAt")]
+    partial class ColumDeleteAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,9 +55,6 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteAt")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -136,9 +135,6 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<int>("Capacidade")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DeleteAt")
-                        .HasColumnType("datetime");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
@@ -164,9 +160,6 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<string>("Cor")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeleteAt")
-                        .HasColumnType("datetime");
 
                     b.Property<string>("NomePilar")
                         .IsRequired()
@@ -217,9 +210,6 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteAt")
-                        .HasColumnType("datetime");
 
                     b.Property<int>("Id_Pilar")
                         .HasColumnType("int");
