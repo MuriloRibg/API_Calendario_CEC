@@ -19,7 +19,7 @@ namespace API_Calendario_CEC.Data.Dto
 
         public string Disponibilidade { get; set; }
 
-        [Required(ErrorMessage = "O campo Id_Pilar é obrigatório!")]
-        public int Pilar { get; set; }
+        [Required(ErrorMessage = "O campo Pilar é obrigatório!")]
+        public string Pilar { get; set; }
     }
 }

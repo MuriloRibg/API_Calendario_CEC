@@ -25,7 +25,7 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Disponibilidade é obrigatório!")]
         public string Disponibilidade { get; set; }
 
-        [Required(ErrorMessage = "O campo Disponibilidade é obrigatório!")]
+        [Required(ErrorMessage = "O campo Pilar é obrigatório!")]
         public string Pilar { get; set; }
         
         public DateTime? DeleteAt { get; set; }
