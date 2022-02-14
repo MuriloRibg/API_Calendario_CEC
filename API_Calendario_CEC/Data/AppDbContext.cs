@@ -13,10 +13,6 @@ namespace API_Calendario_CEC.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Instrutor>()
-                .HasOne(instrutor => instrutor.Pilar)
-                .WithMany(pilar => pilar.Instrutor)
-                .HasForeignKey(instrutor => instrutor.Id_Pilar);
 
             builder.Entity<Turma>()
                 .HasOne(turma => turma.Pilar)

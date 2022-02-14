@@ -14,6 +14,6 @@ namespace API_Calendario_CEC.Data.Dto
         public string Email { get; set; }
         
         public string Disponibilidade { get; set; }
-        public virtual Pilar Pilar { get; set; }
+        public string Pilar { get; set; }
     }
 }
