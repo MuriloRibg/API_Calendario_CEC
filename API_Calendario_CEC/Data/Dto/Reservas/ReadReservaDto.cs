@@ -1,11 +1,11 @@
-﻿using System;
+﻿using API_Calendario_CEC.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace API_Calendario_CEC.Models
+namespace API_Calendario_CEC.Data.Dto.Reservas
 {
-    public class Reserva
+    public class ReadReservaDto
     {
         [Key]
         [Required]
@@ -16,10 +16,12 @@ namespace API_Calendario_CEC.Models
         public string Titulo { get; set; }
 
         [Required(ErrorMessage = "O campo DataInicio é obrigatório!")]
+        [StringLength(20, ErrorMessage = "O campo DataInicio deve possuir 20 caracteres")]
         [DataType(DataType.Date)]
         public DateTime DataInicio { get; set; }
 
         [Required(ErrorMessage = "O campo DataFim é obrigatório!")]
+        [StringLength(20, ErrorMessage = "O campo DataInicio deve possuir 20 caracteres")]
         [DataType(DataType.Date)]
         public DateTime DataFim { get; set; }
 
@@ -34,12 +36,7 @@ namespace API_Calendario_CEC.Models
         [Required(ErrorMessage = "O campo Id_Local é obrigatório!")]
         public int Id_Local { get; set; }
         public virtual Local Local { get; set; }
-
-        [JsonIgnore]
-        public virtual List<Aula> Aulas { get; set; }
-
-        [JsonIgnore]
-        public virtual List<Evento> Eventos { get; set; }
+        public virtual Aula Aula { get; set; }
+        public virtual Evento Evento { get; set; }
     }
-    
 }

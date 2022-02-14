@@ -40,6 +40,8 @@ namespace API_Calendario_CEC
             services.AddScoped<LocalService, LocalService>();
             services.AddScoped<DisciplinaService, DisciplinaService>();
             services.AddScoped<PilarService, PilarService>();
+            services.AddScoped<ReservaService, ReservaService>();
+            services.AddScoped<AulaService, AulaService>();
 
             //Injetando o AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
