@@ -1,5 +1,5 @@
 ﻿using System;
-using API_Calendario_CEC.Data.Dto.Turmas;
+using API_Calendario_CEC.Data.Dto;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 
