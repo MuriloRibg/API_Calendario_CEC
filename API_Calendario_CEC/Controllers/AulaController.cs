@@ -27,8 +27,8 @@ namespace API_Calendario_CEC.Controllers
         [HttpPost]
         public IActionResult CriarAula([FromBody] CreateAulaDto createAulaDto)
         {
-            ReadAulaDto aula = _aulaService.CriarAula(createAulaDto);
-            return Ok(aula);
+            ReadAulaDto aulaDto = _aulaService.CriarAula(createAulaDto);
+            return Ok(aulaDto);
         }
     }
 }
