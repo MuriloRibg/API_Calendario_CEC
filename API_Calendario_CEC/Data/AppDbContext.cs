@@ -14,25 +14,25 @@ namespace API_Calendario_CEC.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            builder.Entity<Turma>()
-                .HasOne(turma => turma.Pilar)
-                .WithMany(pilar => pilar.Turmas)
-                .HasForeignKey(turma => turma.Id_Pilar);
+            builder.Entity<Reserva>()
+                .HasOne(reserva => reserva.Aula)
+                .WithOne(aula => aula.Reserva)
+                .HasForeignKey<Aula>(aula => aula.Id_Reserva);
+
+            builder.Entity<Reserva>()
+                .HasOne(reserva => reserva.Evento)
+                .WithOne(evento => evento.Reserva)
+                .HasForeignKey<Evento>(evento => evento.Id_Reserva);
 
             builder.Entity<Reserva>()
                 .HasOne(reserva => reserva.Local)
                 .WithMany(local => local.Reservas)
                 .HasForeignKey(reserva => reserva.Id_Local);
 
-            builder.Entity<Reserva>()
-                .HasMany(reserva => reserva.Aulas)
-                .WithOne(aula => aula.Reserva)
-                .HasForeignKey(aula => aula.Id_Reserva);
-
-            builder.Entity<Reserva>()
-                .HasMany(reserva => reserva.Eventos)
-                .WithOne(evento => evento.Reserva)
-                .HasForeignKey(evento => evento.Id_Reserva);
+            builder.Entity<Turma>()
+               .HasOne(turma => turma.Pilar)
+               .WithMany(pilar => pilar.Turmas)
+               .HasForeignKey(turma => turma.Id_Pilar);
 
             builder.Entity<Evento>()
                 .HasOne(evento => evento.Instrutor)

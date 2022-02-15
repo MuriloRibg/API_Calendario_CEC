@@ -36,10 +36,10 @@ namespace API_Calendario_CEC.Models
         public virtual Local Local { get; set; }
 
         [JsonIgnore]
-        public virtual List<Aula> Aulas { get; set; }
+        public virtual Aula Aula { get; set; }
 
         [JsonIgnore]
-        public virtual List<Evento> Eventos { get; set; }
+        public virtual Evento Evento { get; set; }
     }
     
 }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Calendario_CEC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220211185738_Tabelas_relacionamentos")]
-    partial class Tabelas_relacionamentos
+    [Migration("20220215033201_Tabelas")]
+    partial class Tabelas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,7 +43,8 @@ namespace API_Calendario_CEC.Migrations
 
                     b.HasIndex("Id_Instrutor");
 
-                    b.HasIndex("Id_Reserva");
+                    b.HasIndex("Id_Reserva")
+                        .IsUnique();
 
                     b.HasIndex("Id_Turma");
 
@@ -55,6 +56,9 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -85,7 +89,8 @@ namespace API_Calendario_CEC.Migrations
 
                     b.HasIndex("Id_Instrutor");
 
-                    b.HasIndex("Id_Reserva");
+                    b.HasIndex("Id_Reserva")
+                        .IsUnique();
 
                     b.ToTable("Eventos");
                 });
@@ -100,6 +105,9 @@ namespace API_Calendario_CEC.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Disponibilidade")
                         .IsRequired()
                         .HasColumnType("text");
@@ -108,17 +116,21 @@ namespace API_Calendario_CEC.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Id_Pilar")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("Pilar")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PilarId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Id_Pilar");
+                    b.HasIndex("PilarId");
 
                     b.ToTable("Instrutores");
                 });
@@ -131,6 +143,9 @@ namespace API_Calendario_CEC.Migrations
 
                     b.Property<int>("Capacidade")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -158,6 +173,9 @@ namespace API_Calendario_CEC.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("NomePilar")
                         .IsRequired()
                         .HasColumnType("text");
@@ -174,11 +192,9 @@ namespace API_Calendario_CEC.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataFim")
-                        .HasMaxLength(20)
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("DataInicio")
-                        .HasMaxLength(20)
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("HoraFim")
@@ -207,6 +223,9 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime");
 
                     b.Property<int>("Id_Pilar")
                         .HasColumnType("int");
@@ -240,8 +259,8 @@ namespace API_Calendario_CEC.Migrations
                         .IsRequired();
 
                     b.HasOne("API_Calendario_CEC.Models.Reserva", "Reserva")
-                        .WithMany("Aulas")
-                        .HasForeignKey("Id_Reserva")
+                        .WithOne("Aula")
+                        .HasForeignKey("API_Calendario_CEC.Models.Aula", "Id_Reserva")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -269,8 +288,8 @@ namespace API_Calendario_CEC.Migrations
                         .IsRequired();
 
                     b.HasOne("API_Calendario_CEC.Models.Reserva", "Reserva")
-                        .WithMany("Eventos")
-                        .HasForeignKey("Id_Reserva")
+                        .WithOne("Evento")
+                        .HasForeignKey("API_Calendario_CEC.Models.Evento", "Id_Reserva")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -281,13 +300,9 @@ namespace API_Calendario_CEC.Migrations
 
             modelBuilder.Entity("API_Calendario_CEC.Models.Instrutor", b =>
                 {
-                    b.HasOne("API_Calendario_CEC.Models.Pilar", "Pilar")
+                    b.HasOne("API_Calendario_CEC.Models.Pilar", null)
                         .WithMany("Instrutor")
-                        .HasForeignKey("Id_Pilar")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pilar");
+                        .HasForeignKey("PilarId");
                 });
 
             modelBuilder.Entity("API_Calendario_CEC.Models.Reserva", b =>
@@ -338,9 +353,9 @@ namespace API_Calendario_CEC.Migrations
 
             modelBuilder.Entity("API_Calendario_CEC.Models.Reserva", b =>
                 {
-                    b.Navigation("Aulas");
+                    b.Navigation("Aula");
 
-                    b.Navigation("Eventos");
+                    b.Navigation("Evento");
                 });
 
             modelBuilder.Entity("API_Calendario_CEC.Models.Turma", b =>
