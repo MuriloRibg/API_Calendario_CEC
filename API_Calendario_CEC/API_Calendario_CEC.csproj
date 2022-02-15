@@ -23,11 +23,13 @@
     <None Remove="Data\Dto\Instrutores\" />
     <None Remove="FluentResults" />
     <None Remove="Data\Dto\Turmas\" />
+    <None Remove="Data\Request\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Data\Dto\Instrutores\" />
     <Folder Include="Data\Dto\Turmas\" />
+    <Folder Include="Data\Request\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.2.7" />
