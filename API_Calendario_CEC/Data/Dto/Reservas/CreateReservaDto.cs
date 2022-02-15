@@ -17,12 +17,6 @@ namespace API_Calendario_CEC.Data.Dto.Reservas
         [Required(ErrorMessage = "O campo DataFim é obrigatório!")]
         public DateTime DataFim { get; set; }
 
-        [Required(ErrorMessage = "O campo HoraInicio é obrigatório!")]
-        public DateTime HoraInicio { get; set; }
-
-        [Required(ErrorMessage = "O campo HoraFim é obrigatório!")]
-        public DateTime HoraFim { get; set; }
-
         [Required(ErrorMessage = "O campo Id_Local é obrigatório!")]
         public int Id_Local { get; set; }
     }

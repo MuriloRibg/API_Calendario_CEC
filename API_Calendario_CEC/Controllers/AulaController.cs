@@ -16,11 +16,11 @@ namespace API_Calendario_CEC.Controllers
             _aulaService = aulaService;
         }
 
-       [HttpGet]
-       public IActionResult ListaAulas()
+        [HttpGet]
+        public IActionResult ListaAulas()
         {
             List<ReadAulaDto> aulas = _aulaService.ListarAulas();
-            if(aulas == null) return NotFound();
+            if (aulas == null) return NotFound();
             return Ok(aulas);
         }
 

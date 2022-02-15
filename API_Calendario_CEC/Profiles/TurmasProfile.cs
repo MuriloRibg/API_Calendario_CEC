@@ -10,6 +10,8 @@ namespace API_Calendario_CEC.Profiles
         public TurmasProfile()
         {
             CreateMap<Turma, ReadTurmasDto>();
+            CreateMap<CreateTurmasDto, Turma>();
+            CreateMap<UpdateInstrutorDto, Turma>();
         }
     }
 }

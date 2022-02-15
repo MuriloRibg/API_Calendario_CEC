@@ -23,14 +23,6 @@ namespace API_Calendario_CEC.Models
         [DataType(DataType.Date)]
         public DateTime DataFim { get; set; }
 
-        [Required(ErrorMessage = "O campo HoraInicio é obrigatório!")]
-        [DataType(DataType.Time)]
-        public DateTime HoraInicio { get; set; }
-
-        [Required(ErrorMessage = "O campo HoraFim é obrigatório!")]
-        [DataType(DataType.Time)]
-        public DateTime HoraFim { get; set; }
-
         [Required(ErrorMessage = "O campo Id_Local é obrigatório!")]
         public int Id_Local { get; set; }
         public virtual Local Local { get; set; }
