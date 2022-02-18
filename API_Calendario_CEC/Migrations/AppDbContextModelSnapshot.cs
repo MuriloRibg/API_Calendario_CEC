@@ -127,12 +127,7 @@ namespace API_Calendario_CEC.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PilarId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PilarId");
 
                     b.ToTable("Instrutores");
                 });
@@ -193,11 +188,16 @@ namespace API_Calendario_CEC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("datetime");
-
                     b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("HoraFim")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("HoraInicio")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Id_Local")
                         .HasColumnType("int");
@@ -294,13 +294,6 @@ namespace API_Calendario_CEC.Migrations
                     b.Navigation("Reserva");
                 });
 
-            modelBuilder.Entity("API_Calendario_CEC.Models.Instrutor", b =>
-                {
-                    b.HasOne("API_Calendario_CEC.Models.Pilar", null)
-                        .WithMany("Instrutor")
-                        .HasForeignKey("PilarId");
-                });
-
             modelBuilder.Entity("API_Calendario_CEC.Models.Reserva", b =>
                 {
                     b.HasOne("API_Calendario_CEC.Models.Local", "Local")
@@ -342,8 +335,6 @@ namespace API_Calendario_CEC.Migrations
 
             modelBuilder.Entity("API_Calendario_CEC.Models.Pilar", b =>
                 {
-                    b.Navigation("Instrutor");
-
                     b.Navigation("Turmas");
                 });
 

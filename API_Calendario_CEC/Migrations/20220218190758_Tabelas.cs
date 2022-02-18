@@ -24,6 +24,24 @@ namespace API_Calendario_CEC.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Instrutores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    Abreviacao = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Disponibilidade = table.Column<string>(type: "text", nullable: false),
+                    Pilar = table.Column<string>(type: "text", nullable: false),
+                    DeleteAt = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Instrutores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locais",
                 columns: table => new
                 {
@@ -63,8 +81,8 @@ namespace API_Calendario_CEC.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Titulo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     DataInicio = table.Column<DateTime>(type: "date", nullable: false),
-                    HoraInicio = table.Column<DateTime>(type: "time", nullable: false),
-                    HoraFim = table.Column<DateTime>(type: "time", nullable: false),
+                    HoraInicio = table.Column<string>(type: "time", nullable: false),
+                    HoraFim = table.Column<string>(type: "time", nullable: false),
                     Id_Local = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -76,31 +94,6 @@ namespace API_Calendario_CEC.Migrations
                         principalTable: "Locais",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instrutores",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    Abreviacao = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Disponibilidade = table.Column<string>(type: "text", nullable: false),
-                    Pilar = table.Column<string>(type: "text", nullable: false),
-                    DeleteAt = table.Column<DateTime>(type: "datetime", nullable: true),
-                    PilarId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Instrutores", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Instrutores_Pilares_PilarId",
-                        column: x => x.PilarId,
-                        principalTable: "Pilares",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,7 +125,8 @@ namespace API_Calendario_CEC.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Id_Instrutor = table.Column<int>(type: "int", nullable: false),
-                    Id_Reserva = table.Column<int>(type: "int", nullable: false)
+                    Id_Reserva = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,11 +216,6 @@ namespace API_Calendario_CEC.Migrations
                 table: "Eventos",
                 column: "Id_Reserva",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instrutores_PilarId",
-                table: "Instrutores",
-                column: "PilarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_Id_Local",

@@ -24,8 +24,5 @@ namespace API_Calendario_CEC.Models
 
         [JsonIgnore]
         public virtual List<Turma> Turmas { get; set; }
-
-        [JsonIgnore]
-        public virtual List<Instrutor> Instrutor { get; set; }
     }
 }
