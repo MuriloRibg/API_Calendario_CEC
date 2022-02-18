@@ -62,10 +62,9 @@ namespace API_Calendario_CEC.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Titulo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "datetime", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime", nullable: false),
-                    HoraInicio = table.Column<DateTime>(type: "datetime", nullable: false),
-                    HoraFim = table.Column<DateTime>(type: "datetime", nullable: false),
+                    DataInicio = table.Column<DateTime>(type: "date", nullable: false),
+                    HoraInicio = table.Column<DateTime>(type: "time", nullable: false),
+                    HoraFim = table.Column<DateTime>(type: "time", nullable: false),
                     Id_Local = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

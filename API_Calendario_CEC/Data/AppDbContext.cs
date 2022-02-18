@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using API_Calendario_CEC.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,21 @@ namespace API_Calendario_CEC.Data
         public AppDbContext(DbContextOptions<AppDbContext> opts)
             :base(opts)
         {
+        }
+
+        public Reserva validaReserva(int? idEvento, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
+        {
+            var reserva = Reservas
+                .FromSqlRaw($"SELECT * " +
+                $"FROM Reservas AS eventos " +
+                "WHERE (id <> {0}) AND (eventos.DataInicio = {1}" +
+                $" AND eventos.{nomeColuna} = {idColuna}) AND " +
+                "(( {2} BETWEEN eventos.HoraInicio AND eventos.HoraFim) " +
+                "OR ({3} BETWEEN eventos.HoraInicio AND eventos.HoraFim) " +
+                "OR (eventos.HoraInicio BETWEEN {2} AND {3}) " +
+                "OR (eventos.HoraFim BETWEEN {2} AND {3}))", idEvento, data, horaInicio, horaFim)
+                .FirstOrDefaultAsync();
+            return reserva.Result;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

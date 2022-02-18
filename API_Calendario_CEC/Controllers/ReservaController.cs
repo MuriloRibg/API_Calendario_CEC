@@ -2,6 +2,7 @@
 using API_Calendario_CEC.Data.Request;
 using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -29,8 +30,9 @@ namespace API_Calendario_CEC.Controllers
         [HttpPost]
         public IActionResult CriarReserva([FromBody] CreateReservaDto createReservaDto)
         {
-            Reserva reserva = _reservaService.criaReserva(createReservaDto);
-            return Ok(reserva);
+            Result resultado = _reservaService.criaReserva(createReservaDto);
+            if (resultado.IsFailed) return BadRequest(resultado.Reasons);
+            return Ok(resultado.Reasons);
         }
     }
 }

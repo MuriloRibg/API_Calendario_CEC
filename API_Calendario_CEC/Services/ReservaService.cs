@@ -3,6 +3,7 @@ using API_Calendario_CEC.Data.Dto.Reservas;
 using API_Calendario_CEC.Data.Request;
 using API_Calendario_CEC.Models;
 using AutoMapper;
+using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,12 +28,14 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadReservaDto>>(reservas);
         }
 
-        public Reserva criaReserva(CreateReservaDto createReservaDto)
+        public Result criaReserva(CreateReservaDto createReservaDto)
         {
+            Reserva valida = _context.validaReserva(0, "Id_local", createReservaDto.Id_Local ,createReservaDto.DataInicio.ToString("yyyy-MM-dd") , createReservaDto.HoraInicio, createReservaDto.HoraFim);
+            if (valida != null) return Result.Fail("Falhou");
             Reserva reserva = _mapper.Map<Reserva>(createReservaDto);
             _context.Add(reserva);
             _context.SaveChanges();
-            return reserva;
+            return Result.Ok().WithSuccess("Adicionado");
         }        
     }
 }
