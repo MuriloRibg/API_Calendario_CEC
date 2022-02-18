@@ -11,14 +11,6 @@ namespace API_Calendario_CEC.Data.Request
 
         public DateTime end { get; set; }
 
-        public string color { get; set; }        
-
-        public FullCalendarRequest(string title, DateTime start, DateTime end, string color)
-        {
-            this.title = title;
-            this.start = start;
-            this.end = end;
-            this.color = color;
-        }
+        public string color { get; set; }                
     }
 }

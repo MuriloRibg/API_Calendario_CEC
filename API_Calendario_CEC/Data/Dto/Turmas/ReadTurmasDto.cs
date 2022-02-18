@@ -6,6 +6,8 @@ namespace API_Calendario_CEC.Data.Dto
 {
     public class ReadTurmasDto
     {
+        public int Id { get; set; }
+
         public string Nome { get; set; }
 
         public int Quant_alunos { get; set; }
