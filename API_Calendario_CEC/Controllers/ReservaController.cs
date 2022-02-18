@@ -27,15 +27,6 @@ namespace API_Calendario_CEC.Controllers
             return Ok(reservasDto);
         }
 
-        [HttpGet]
-        [Route("calendario")]
-        public IActionResult ListarReservasFullCalendar()
-        {
-            List<FullCalendarRequest> reservas = _reservaService.ListarReservasFullCalendar();
-            if (reservas == null) return NotFound("Sem reservas");
-            return Ok(reservas);
-        }
-
         [HttpPost]
         public IActionResult CriarReserva([FromBody] CreateReservaDto createReservaDto)
         {
