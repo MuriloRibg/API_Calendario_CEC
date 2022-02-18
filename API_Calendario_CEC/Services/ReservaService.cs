@@ -14,7 +14,7 @@ namespace API_Calendario_CEC.Services
     {
         private AppDbContext _context;
         private IMapper _mapper;
-        private List<FullCalendarRequest> fullCalendarRequests;
+        public List<FullCalendarRequest> fullCalendarRequests;
 
         public ReservaService(AppDbContext context, IMapper mapper)
         {
