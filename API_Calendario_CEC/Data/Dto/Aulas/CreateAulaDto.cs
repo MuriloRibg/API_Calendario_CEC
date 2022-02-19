@@ -4,6 +4,14 @@ namespace API_Calendario_CEC.Data.Dto.Aulas
 {
     public class CreateAulaDto
     {
+        public CreateAulaDto(int id_Instrutor, int id_Turma, int id_Disciplina, int id_Reserva)
+        {
+            Id_Instrutor = id_Instrutor;
+            Id_Turma = id_Turma;
+            Id_Disciplina = id_Disciplina;
+            Id_Reserva = id_Reserva;
+        }
+
         [Required(ErrorMessage = "O campo Id_Instrutor é obrigatório!")]
         public int Id_Instrutor { get; set; }
 
