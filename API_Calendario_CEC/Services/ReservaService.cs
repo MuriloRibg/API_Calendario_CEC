@@ -32,9 +32,15 @@ namespace API_Calendario_CEC.Services
 
         public Result criaReserva(CreateReservaDto createReservaDto)
         {
-            Reserva valida = _context
-                .validaReserva(0, "Id_local", createReservaDto.Id_Local ,createReservaDto.DataInicio.ToString("yyyy-MM-dd") , createReservaDto.HoraInicio, createReservaDto.HoraFim);
-            if (valida != null) return Result.Fail("Falhou");
+            Reserva validaInstrutor = _context
+                .validaEvento(0, "aulas", "Id_instrutor", createReservaDto.Id_Instrutor ,createReservaDto.DataInicio.ToString("yyyy-MM-dd") , createReservaDto.HoraInicio, createReservaDto.HoraFim);
+            Reserva validaLocal = _context
+                .validaEvento(0, "aulas", "Id_local", createReservaDto.Id_Local ,createReservaDto.DataInicio.ToString("yyyy-MM-dd") , createReservaDto.HoraInicio, createReservaDto.HoraFim);    
+                
+            if (
+                validaInstrutor != null || 
+                validaLocal != null
+            ) return Result.Fail("Falhou");
 
             Reserva reserva = _mapper.Map<Reserva>(createReservaDto);
             _context.Add(reserva);

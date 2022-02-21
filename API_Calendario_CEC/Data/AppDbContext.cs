@@ -15,16 +15,35 @@ namespace API_Calendario_CEC.Data
         public Reserva validaReserva(int? idEvento, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
         {
             var reserva = Reservas
-                .FromSqlRaw($"SELECT * " +
-                $"FROM Reservas AS eventos " +
+                .FromSqlRaw("SELECT * " +
+                "FROM Reservas AS eventos " +
                 "WHERE (id <> {0}) AND (eventos.DataInicio = {1}" +
                 $" AND eventos.{nomeColuna} = {idColuna}) AND " +
                 "(( {2} BETWEEN eventos.HoraInicio AND eventos.HoraFim) " +
                 "OR ({3} BETWEEN eventos.HoraInicio AND eventos.HoraFim) " +
                 "OR (eventos.HoraInicio BETWEEN {2} AND {3}) " +
                 "OR (eventos.HoraFim BETWEEN {2} AND {3}))", idEvento, data, horaInicio, horaFim)
-                .FirstOrDefaultAsync();
-            return reserva.Result;
+                .FirstOrDefaultAsync()
+                .Result;
+            return reserva;
+        }
+
+        public Reserva validaEvento(int? idEvento, string tabela, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
+        {
+            var reserva = Reservas
+                .FromSqlRaw("SELECT " +
+                "reserva.Id, Titulo, DataInicio, HoraInicio, HoraFim, Id_Local, a.Id as Id_evento " +
+                "FROM Reservas AS reserva " +
+                $"INNER JOIN {tabela} AS a ON a.Id_Reserva = reserva.Id " +
+                "WHERE (reserva.id <> {0}) AND (reserva.DataInicio = {1}" +
+                $" AND {nomeColuna} = {idColuna}) AND " +
+                "(( {2} BETWEEN reserva.HoraInicio AND reserva.HoraFim) " +
+                "OR ({3} BETWEEN reserva.HoraInicio AND reserva.HoraFim) " +
+                "OR (reserva.HoraInicio BETWEEN {2} AND {3}) " +
+                "OR (reserva.HoraFim BETWEEN {2} AND {3}))", idEvento, data, horaInicio, horaFim)
+                .FirstOrDefaultAsync()
+                .Result;
+            return reserva;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
