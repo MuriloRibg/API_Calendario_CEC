@@ -29,7 +29,6 @@
     <Folder Include="Models\" />
     <Folder Include="Data\Dto\Instrutores\" />
     <Folder Include="Data\Dto\Turmas\" />
-    <Folder Include="Data\Request\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.2.7" />

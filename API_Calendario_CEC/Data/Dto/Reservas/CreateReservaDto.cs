@@ -25,6 +25,9 @@ namespace API_Calendario_CEC.Data.Dto.Reservas
         [Required(ErrorMessage = "O campo Id_Local é obrigatório!")]
         public int Id_Local { get; set; }
 
+        [Required(ErrorMessage = "O campo TipoEvento é obrigatório!")]
+        public string TipoEvento { get; set; }
+
         //campos para informar se aula ou evento que serão tratados no service de reservas
         public int Id_Instrutor { get; set; }
         public int Id_Turma { get; set; }
