@@ -22,14 +22,27 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<ReadTurmasDto> ListarTurmas()
+        public List<ReadTurmasDto> ListarTurmas(string? pilar)
         {
-            List<Turma> turmas = _context.Turmas
-                .Where(turma => turma.DeleteAt == null)
-                .ToList();
-            
-            if (turmas == null) return null;
-            return _mapper.Map<List<ReadTurmasDto>>(turmas);
+            List<Turma> turmas;
+            if (pilar == null)
+            {
+                turmas = _context.Turmas
+                    .Where(turma => turma.DeleteAt == null)
+                    .ToList();
+            }
+            else
+            {
+                turmas = _context.Turmas
+                    .Where(turma => turma.DeleteAt == null &&
+                    turma.Pilar.NomePilar.ToUpper() == pilar.ToUpper())
+                    .ToList();
+            }
+            if (turmas != null)
+            {
+                return _mapper.Map<List<ReadTurmasDto>>(turmas);
+            };
+            return null;
         }
 
         //GET ID

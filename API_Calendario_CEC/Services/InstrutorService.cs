@@ -22,14 +22,27 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<ReadInstrutorDto> ListarInstrutores()
+        public List<ReadInstrutorDto> ListarInstrutores(string? pilar)
         {
-            List<Instrutor> instrutores = _context.Instrutores
-                .Where(instrutor => instrutor.DeleteAt == null)
-                .ToList();
-            
-            if (instrutores == null) return null;
-            return _mapper.Map<List<ReadInstrutorDto>>(instrutores);
+            List<Instrutor> instrutores;
+            if (pilar == null)
+            {
+                instrutores = _context.Instrutores
+                    .Where(instrutor => instrutor.DeleteAt == null)
+                    .ToList();
+            }
+            else
+            {
+                instrutores = _context.Instrutores
+                    .Where(instrutor => instrutor.DeleteAt == null &&
+                        instrutor.Pilar.ToUpper() == pilar.ToUpper())
+                    .ToList();
+            }
+            if (instrutores != null)
+            {
+                return _mapper.Map<List<ReadInstrutorDto>>(instrutores);
+            }
+            return null;    
         }
 
         //GET ID
