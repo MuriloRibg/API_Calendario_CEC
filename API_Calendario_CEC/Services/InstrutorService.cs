@@ -63,13 +63,13 @@ namespace API_Calendario_CEC.Services
                         instrutor.Pilar.ToUpper() == pilar.ToUpper())
                     .ToList();
             }
-            if (instrutores != null)
+            if (instrutores != null && page != 0)
             {
                 int pageSize = 2;
                 int pageNumber = (page ?? 1);
                 return _mapper.Map<List<ReadInstrutorDto>>(instrutores.ToPagedList(pageNumber, pageSize));
             }
-            return null;    
+            return _mapper.Map<List<ReadInstrutorDto>>(instrutores);    
         }
 
         //GET ID
