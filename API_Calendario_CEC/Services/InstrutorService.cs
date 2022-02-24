@@ -65,9 +65,12 @@ namespace API_Calendario_CEC.Services
             }
             if (instrutores != null)
             {
-                int pageSize = 2;
-                int pageNumber = (page ?? 1);
-                return _mapper.Map<List<ReadInstrutorDto>>(instrutores.ToPagedList(pageNumber, pageSize));
+                // Quantidade de items por página
+                int pageSize = 3;
+
+                //Se á página for null, coverte para 1
+                int currentPage = (page ?? 1);
+                return _mapper.Map<List<ReadInstrutorDto>>(instrutores.ToPagedList(currentPage, pageSize));
             }
             return null;    
         }
