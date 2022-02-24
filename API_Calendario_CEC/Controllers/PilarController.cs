@@ -20,48 +20,48 @@ namespace API_Calendario_CEC.Controllers
 
         [HttpGet]
         [Route("pilares")]
-        public IActionResult retornaPilares()
+        public IActionResult RetornaPilares()
         {
-            List<string> pilaresDto = _pilarService.retornaPilar();
+            List<string> pilaresDto = _pilarService.RetornaPilar();
             if (pilaresDto == null) return NotFound();
             return Ok(pilaresDto);
         }
 
         [HttpGet]
-        public IActionResult retornaTodosPilares()
+        public IActionResult RetornaTodosPilares()
         {
-            List<ReadPilarDto> pilaresDto = _pilarService.retornaTodosPilares();
+            List<ReadPilarDto> pilaresDto = _pilarService.RetornaTodosPilares();
             if (pilaresDto == null) return NotFound();
             return Ok(pilaresDto);
         }
 
         [HttpGet("{id}")]
-        public IActionResult retornaPilarPorId(int id)
+        public IActionResult RetornaPilarPorId(int id)
         {
-            ReadPilarDto readPilarDto = _pilarService.retornaPilarPorId(id);
+            ReadPilarDto readPilarDto = _pilarService.RetornaPilarPorId(id);
             if (readPilarDto == null) return NotFound();
             return Ok(readPilarDto);
         }
 
         [HttpPost]
-        public IActionResult criarPilar(CreatePilarDto createPilarDto)
+        public IActionResult CriarPilar(CreatePilarDto createPilarDto)
         {
-            Pilar pilar = _pilarService.criarPilar(createPilarDto);
-            return CreatedAtAction(nameof(retornaPilarPorId), new { Id = pilar.Id }, pilar);
+            Pilar pilar = _pilarService.CriarPilar(createPilarDto);
+            return CreatedAtAction(nameof(RetornaPilarPorId), new { Id = pilar.Id }, pilar);
         }
 
         [HttpPut("{id}")]
-        public IActionResult atualizarPilar(int id, [FromBody] UpdatePilarDto updatePilarDto)
+        public IActionResult AtualizarPilar(int id, [FromBody] UpdatePilarDto updatePilarDto)
         {
-            Result result = _pilarService.atualizarPilar(id, updatePilarDto);
+            Result result = _pilarService.AtualizarPilar(id, updatePilarDto);
             if (result.IsFailed) return NotFound(result.Reasons);
             return Ok(result.Reasons);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult deletarPilar(int id)
+        public IActionResult DeletarPilar(int id)
         {
-            Result result = _pilarService.deletarPilar(id);
+            Result result = _pilarService.DeletarPilar(id);
             if(result.IsFailed) return NotFound(result.Reasons);
             return Ok(result.Reasons);
         }

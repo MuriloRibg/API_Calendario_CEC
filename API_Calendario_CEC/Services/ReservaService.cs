@@ -38,6 +38,24 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadReservaDto>>(reservas);
         }
 
+        public List<FullCalendarRequest> ListarReservasCalendario()
+        {
+            List<Reserva> reservas = _context.Reservas.ToList();
+            List<FullCalendarRequest> fullCalendar= new List<FullCalendarRequest>();
+
+            foreach (Reserva reserva in reservas)
+            {
+                string data = reserva.DataInicio.ToString("yyyy-MM-dd");
+                string start = data + "T" + reserva.HoraInicio;
+                string end = data + "T" + reserva.HoraFim;
+                string cor = reserva.Aula.Turma.Pilar.Cor;
+                string display = "block";
+
+                fullCalendar.Add(new FullCalendarRequest(reserva.Titulo, start, end, cor, display));
+            }
+            return fullCalendar;
+        }
+
         public Result criaReserva(CreateReservaDto createReservaDto)
         {
             Reserva validaInstrutor = _context

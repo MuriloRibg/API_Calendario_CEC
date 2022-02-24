@@ -1,6 +1,5 @@
 ﻿using API_Calendario_CEC.Data.Dto.Reservas;
 using API_Calendario_CEC.Data.Request;
-using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +24,15 @@ namespace API_Calendario_CEC.Controllers
             List<ReadReservaDto> reservasDto = _reservaService.ListarReservas();
             if(reservasDto == null) return NotFound();
             return Ok(reservasDto);
+        }
+
+        [HttpGet]
+        [Route("/calendario")]
+        public IActionResult ListaReservasCalendario()
+        {
+            List<FullCalendarRequest> reservasCalendarioDto = _reservaService.ListarReservasCalendario();
+            if (reservasCalendarioDto == null) return NotFound();
+            return Ok(reservasCalendarioDto);
         }
 
         [HttpPost]

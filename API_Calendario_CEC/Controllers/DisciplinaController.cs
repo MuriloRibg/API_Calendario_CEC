@@ -1,10 +1,9 @@
 ﻿using API_Calendario_CEC.Data.Dto.Disciplinas;
 using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
-using FluentResults;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
+using FluentResults;
 
 namespace API_Calendario_CEC.Controllers
 {

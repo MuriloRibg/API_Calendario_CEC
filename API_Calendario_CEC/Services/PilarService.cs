@@ -21,7 +21,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<string> retornaPilar()
+        public List<string> RetornaPilar()
         {
             IEnumerable<Pilar> queryLastNames = ( from Pilares in _context.Pilares
                                                 select Pilares).Distinct().ToList();
@@ -33,7 +33,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<ReadPilarDto> retornaTodosPilares()
+        public List<ReadPilarDto> RetornaTodosPilares()
         {
             List<Pilar> pilares = _context.Pilares.ToList();
             if (pilares == null) return null;
@@ -41,7 +41,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET ID
-        public ReadPilarDto retornaPilarPorId(int id)
+        public ReadPilarDto RetornaPilarPorId(int id)
         {
             Pilar pilar = _context.Pilares.FirstOrDefault(pilar => pilar.Id == id);
             if (pilar == null) return null;
@@ -49,7 +49,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //POST
-        public Pilar criarPilar(CreatePilarDto createPilarDto)
+        public Pilar CriarPilar(CreatePilarDto createPilarDto)
         {
             Pilar pilar = _context.Pilares
                 .FirstOrDefault(pilar => pilar.NomePilar.ToUpper() == createPilarDto.NomePilar.ToUpper());
@@ -64,7 +64,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //PUT
-        public Result atualizarPilar(int id, UpdatePilarDto updatePilarDto)
+        public Result AtualizarPilar(int id, UpdatePilarDto updatePilarDto)
         {
             Pilar pilar = _context.Pilares.FirstOrDefault(pilar => pilar.Id == id);
             if (pilar == null) return Result.Fail("Pilar não encontrado!");
@@ -74,7 +74,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //DELETE
-        public Result deletarPilar(int id)
+        public Result DeletarPilar(int id)
         {
             Pilar pilar = _context.Pilares.FirstOrDefault(pilar => pilar.Id == id);
             if (pilar == null) return Result.Fail("Pilar não encontrado!");
