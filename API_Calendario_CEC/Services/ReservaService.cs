@@ -49,8 +49,9 @@ namespace API_Calendario_CEC.Services
                 string start = data + "T" + reserva.HoraInicio;
                 string end = data + "T" + reserva.HoraFim;
                 string cor = reserva.Aula.Turma.Pilar.Cor;
+                string display = "block";
 
-                fullCalendar.Add(new FullCalendarRequest(reserva.Titulo, start, end, cor));
+                fullCalendar.Add(new FullCalendarRequest(reserva.Titulo, start, end, cor, display));
             }
             return fullCalendar;
         }

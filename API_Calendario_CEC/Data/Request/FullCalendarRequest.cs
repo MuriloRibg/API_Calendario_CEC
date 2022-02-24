@@ -13,12 +13,15 @@ namespace API_Calendario_CEC.Data.Request
 
         public string color { get; set; }
 
-        public FullCalendarRequest(string title, string start, string end, string color)
+        public string display { get; set; }
+
+        public FullCalendarRequest(string title, string start, string end, string color, string display)
         {
             this.title = title;
             this.start = start;
             this.end = end;
             this.color = color;
+            this.display = display;
         }
     }
 }
