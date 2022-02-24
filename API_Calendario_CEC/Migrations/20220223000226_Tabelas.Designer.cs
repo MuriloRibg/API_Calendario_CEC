@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Calendario_CEC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220218190758_Tabelas")]
+    [Migration("20220223000226_Tabelas")]
     partial class Tabelas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -18,10 +18,19 @@ namespace API_Calendario_CEC.Controllers
             _instrutorService = instrutorService;
         }
 
-        [HttpGet]
-        public IActionResult ListarInstrutores([FromQuery] string? pilar = null)
+        // [HttpGet]
+        // public IActionResult ListarInstrutores([FromQuery] string? pilar = null)
+        // {
+        //     List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pilar);
+        //     if (instrutores == null) return NotFound();
+        //     return Ok(instrutores);
+
+        // }
+
+        [HttpGet("page/{page?}")]
+        public IActionResult ListarInstrutores([FromQuery] string? pilar = null, int? page = 0)
         {
-            List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pilar);
+            List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pilar, page);
             if (instrutores == null) return NotFound();
             return Ok(instrutores);
 
