@@ -9,7 +9,7 @@ namespace API_Calendario_CEC.Data.Dto
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O campo Quantidade é obrigatório!")]
-        public int Quantidade { get; set; }
+        public int Quant_alunos { get; set; }
 
         [Required(ErrorMessage = "O campo Id_Pilar é obrigatório!")]
         public int Id_Pilar { get; set; }

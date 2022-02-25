@@ -32,9 +32,20 @@ namespace API_Calendario_CEC.Services
             _disciplinaService = disiciplina;
         }
 
-        public List<ReadReservaDto> ListarReservas()
+        public List<ReadReservaDto> ListarReservas(string? data)
         {
-            List<Reserva> reservas = _context.Reservas.ToList();
+            List<Reserva> reservas;
+            if (data != null)
+            {
+                reservas = _context.Reservas
+                    .Where(r => r.DataInicio.ToString("yyyy-MM-dd") == data)
+                    .ToList();
+            }
+            else
+            {
+                reservas = _context.Reservas.ToList();
+            }
+            
             return _mapper.Map<List<ReadReservaDto>>(reservas);
         }
 
