@@ -32,7 +32,12 @@ namespace API_Calendario_CEC.Controllers
         {
             List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pilar, page);
             if (instrutores == null) return NotFound();
-            return Ok(instrutores);
+            int qtdTotalInstrutores = _instrutorService.QuantidadeTotalInstrutores();
+            
+            return Ok(new {
+                instrutores,
+                qtdTotalInstrutores
+            });
         }
 
         [HttpGet("{id}")]
