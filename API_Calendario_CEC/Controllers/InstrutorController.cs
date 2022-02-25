@@ -17,7 +17,7 @@ namespace API_Calendario_CEC.Controllers
         {
             _instrutorService = instrutorService;
         }
-
+        
         [HttpGet]
         public IActionResult ListarInstrutores([FromQuery] string? pilar = null, [FromQuery] int? page = 0)
         {

@@ -19,9 +19,9 @@ namespace API_Calendario_CEC.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListarDisciplinas()
+        public IActionResult ListarDisciplinas([FromQuery] string? pilar)
         {
-            List<ReadDisciplinaDto> disciplinas = _disciplinaService.listarDisciplinas();
+            List<ReadDisciplinaDto> disciplinas = _disciplinaService.listarDisciplinas(pilar);
             if(disciplinas == null) return NotFound();
             return Ok(disciplinas);
         }

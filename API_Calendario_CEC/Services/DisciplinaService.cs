@@ -21,11 +21,22 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<ReadDisciplinaDto> listarDisciplinas()
+        public List<ReadDisciplinaDto> listarDisciplinas(string? pilar)
         {
-            List<Disciplina> disciplinas = _context.Disciplinas
-                .Where(instrutor => instrutor.DeleteAt == null)
-                .ToList();
+            List<Disciplina> disciplinas;
+            if (pilar == null)
+            {
+                disciplinas = _context.Disciplinas
+                    .Where(disciplina => disciplina.DeleteAt == null)
+                    .ToList();
+                
+            }
+            else {
+                disciplinas = _context.Disciplinas
+                    .Where(disciplina => disciplina.DeleteAt == null
+                    && disciplina.Pilar.ToUpper() == pilar.ToUpper())
+                    .ToList();
+            }
             if (disciplinas == null) return null;
             return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas);
         }
