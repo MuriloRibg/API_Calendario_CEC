@@ -23,7 +23,7 @@ namespace API_Calendario_CEC.Services
 
         // Retorna quantidade total de instrutores
         public int QuantidadeTotalInstrutores() {
-            int total = _context.Instrutores.Count();
+            int total = _context.Instrutores.Where(instrutor => instrutor.DeleteAt == null).Count();
             return total;
         }
 
@@ -43,12 +43,13 @@ namespace API_Calendario_CEC.Services
                         instrutor.Pilar.ToUpper() == pilar.ToUpper())
                     .ToList();
             }
-            if (instrutores != null && page != 0)
+            if (instrutores != null && page != null && page != 0)
             {
                 int pageSize = 6;
                 int currentPage = (page ?? 1);
                 return _mapper.Map<List<ReadInstrutorDto>>(instrutores.ToPagedList(currentPage, pageSize));
             }
+
             return _mapper.Map<List<ReadInstrutorDto>>(instrutores);    
         }
 
