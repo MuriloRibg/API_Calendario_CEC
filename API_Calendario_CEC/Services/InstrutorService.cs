@@ -6,8 +6,6 @@ using API_Calendario_CEC.Data.Dto;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
-using Microsoft.EntityFrameworkCore;
-
 using PagedList;
 
 namespace API_Calendario_CEC.Services
@@ -23,29 +21,11 @@ namespace API_Calendario_CEC.Services
             _mapper = mapper;
         }
 
-        //GET
-        // public List<ReadInstrutorDto> ListarInstrutores(string? pilar)
-        // {
-        //     List<Instrutor> instrutores;
-        //     if (pilar == null)
-        //     {
-        //         instrutores = _context.Instrutores
-        //             .Where(instrutor => instrutor.DeleteAt == null)
-        //             .ToList();
-        //     }
-        //     else
-        //     {
-        //         instrutores = _context.Instrutores
-        //             .Where(instrutor => instrutor.DeleteAt == null &&
-        //                 instrutor.Pilar.ToUpper() == pilar.ToUpper())
-        //             .ToList();
-        //     }
-        //     if (instrutores != null)
-        //     {
-        //         return _mapper.Map<List<ReadInstrutorDto>>(instrutores);
-        //     }
-        //     return null;    
-        // }
+        // Retorna quantidade total de instrutores
+        public int QuantidadeTotalInstrutores() {
+            int total = _context.Instrutores.Count();
+            return total;
+        }
 
         public List<ReadInstrutorDto> ListarInstrutores(string? pilar, int? page)
         {
@@ -65,10 +45,7 @@ namespace API_Calendario_CEC.Services
             }
             if (instrutores != null && page != 0)
             {
-                // Quantidade de items por página
-                int pageSize = 3;
-
-                //Se á página for null, coverte para 1
+                int pageSize = 6;
                 int currentPage = (page ?? 1);
                 return _mapper.Map<List<ReadInstrutorDto>>(instrutores.ToPagedList(currentPage, pageSize));
             }
