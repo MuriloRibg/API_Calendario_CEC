@@ -48,6 +48,14 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<ReadPilarDto>(pilar);
         }
 
+        public List<ReadPilarDto> RetornaCategoriasPorPilar(string pilar)
+        {
+            List<Pilar> pilares = _context.Pilares
+                .Where(p => p.NomePilar.ToUpper() == pilar.ToUpper()).ToList();
+            if (pilares == null) return null;
+            return _mapper.Map<List<ReadPilarDto>>(pilares);
+        }
+
         //POST
         public Pilar CriarPilar(CreatePilarDto createPilarDto)
         {

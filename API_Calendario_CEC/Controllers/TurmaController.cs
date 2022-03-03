@@ -33,7 +33,7 @@ namespace API_Calendario_CEC.Controllers
             ReadTurmasDto turmaDto = _turmaService.RecuperarTurmaPorId(id);
             if(turmaDto == null) return NotFound();
             return Ok(turmaDto);
-        }
+        }        
 
         [HttpPost]
         public IActionResult CriaTurma([FromBody] CreateTurmasDto turmaDto)

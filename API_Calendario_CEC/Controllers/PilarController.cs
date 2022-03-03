@@ -43,6 +43,15 @@ namespace API_Calendario_CEC.Controllers
             return Ok(readPilarDto);
         }
 
+        [HttpGet]
+        [Route("categorias")]
+        public IActionResult RetornaCategoriasPorPilar([FromQuery] string pilar)
+        {
+            List<ReadPilarDto> readPilarDto = _pilarService.RetornaCategoriasPorPilar(pilar);
+            if (readPilarDto == null) return NotFound();
+            return Ok(readPilarDto);
+        }
+
         [HttpPost]
         public IActionResult CriarPilar(CreatePilarDto createPilarDto)
         {
