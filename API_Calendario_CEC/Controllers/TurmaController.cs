@@ -2,7 +2,6 @@
 using API_Calendario_CEC.Data.Dto;
 using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
-using API_Calendario_CEC.Profiles;
 using Microsoft.AspNetCore.Mvc;
 using FluentResults;
 

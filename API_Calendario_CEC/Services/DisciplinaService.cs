@@ -3,6 +3,7 @@ using API_Calendario_CEC.Data.Dto.Disciplinas;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //GET
-        public List<ReadDisciplinaDto> listarDisciplinas(string? pilar)
+        public List<ReadDisciplinaDto> listarDisciplinas(string? pilar, int? page)
         {
             List<Disciplina> disciplinas;
             if (pilar == null)
@@ -37,8 +38,21 @@ namespace API_Calendario_CEC.Services
                     && disciplina.Pilar.ToUpper() == pilar.ToUpper())
                     .ToList();
             }
-            if (disciplinas == null) return null;
+            if (disciplinas != null && page != null && page != 0)
+            {
+                int pageSize = 6;
+                int currentPage = (page ?? 1);
+                return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas.ToPagedList(currentPage, pageSize));
+            }
+
             return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas);
+        }
+
+        public int QuantidadeTotalDisciplinas()
+        {
+            int quantidadeTotal = _context.Disciplinas
+                .Where(disciplina => disciplina.DeleteAt == null).Count();
+            return quantidadeTotal;
         }
 
         //GET ID

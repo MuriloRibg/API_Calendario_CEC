@@ -65,8 +65,7 @@ namespace API_Calendario_CEC.Services
 
             if(turmaCadastrado == null)
             {
-                Turma turma = _mapper.Map<Turma>(createTurmaDto);
-
+                Turma turma = _mapper.Map<Turma>(createTurmaDto);                
                 _context.Add(turma);    
                 _context.SaveChanges();
                 return turma;
@@ -81,7 +80,7 @@ namespace API_Calendario_CEC.Services
                 .FirstOrDefault(turma => turma.Id == id);
 
             if (turma == null) return Result.Fail("Turma não encontrada");
-            _mapper.Map(updateTurmaDto, turma); //Atualizando a Turma;
+            _mapper.Map(updateTurmaDto, turma);
             _context.SaveChanges();
             return Result.Ok().WithSuccess("Turma atualizada com sucesso!");
         }

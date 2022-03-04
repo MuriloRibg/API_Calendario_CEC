@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace API_Calendario_CEC.Data.Dto
@@ -13,5 +13,6 @@ namespace API_Calendario_CEC.Data.Dto
 
         [Required(ErrorMessage = "O campo Id_Pilar é obrigatório!")]
         public int Id_Pilar { get; set; }
+
     }
 }

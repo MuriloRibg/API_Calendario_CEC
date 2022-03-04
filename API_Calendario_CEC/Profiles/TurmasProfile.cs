@@ -11,7 +11,7 @@ namespace API_Calendario_CEC.Profiles
         {
             CreateMap<Turma, ReadTurmasDto>();
             CreateMap<CreateTurmasDto, Turma>();
-            CreateMap<UpdateInstrutorDto, Turma>();
+            CreateMap<UpdateTurmasDto, Turma>();
         }
     }
 }
