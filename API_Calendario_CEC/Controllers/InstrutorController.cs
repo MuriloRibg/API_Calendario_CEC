@@ -4,6 +4,7 @@ using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
 using Microsoft.AspNetCore.Mvc;
 using FluentResults;
+using System;
 
 namespace API_Calendario_CEC.Controllers
 {
@@ -17,13 +18,30 @@ namespace API_Calendario_CEC.Controllers
         {
             _instrutorService = instrutorService;
         }
-        
+
+        [HttpGet("{pilar}")]
+        public IActionResult ListarInstrutoresPorPilar(string pilar) {
+            List<ReadInstrutorDto> instrutoresPorPilar = _instrutorService.ListarInstrutorPorPilar(pilar);
+            if (instrutoresPorPilar == null) return NotFound();
+
+            return Ok(instrutoresPorPilar);
+        }
+
         [HttpGet]
-        public IActionResult ListarInstrutores([FromQuery] string? pilar = null, [FromQuery] int? page = 0)
+        public IActionResult ListarInstrutores([FromQuery] string pesquisa, [FromQuery] int page)
         {
-            List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pilar, page);
+
+            List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pesquisa, page);
             if (instrutores == null) return NotFound();
-            int qtdTotalInstrutores = _instrutorService.QuantidadeTotalInstrutores();
+           
+            int qtdTotalInstrutores = 0;
+            
+            if (pesquisa == null || pesquisa == "") {
+                qtdTotalInstrutores = _instrutorService.QuantidadeTotalInstrutores();
+            } 
+            else {
+                qtdTotalInstrutores = _instrutorService.QuantidadeTotalPesquisa(pesquisa);
+            }
             
             return Ok(new {
                 instrutores,

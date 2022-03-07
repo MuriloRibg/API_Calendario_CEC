@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using API_Calendario_CEC.Data;
 using API_Calendario_CEC.Data.Dto;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
+
 using PagedList;
 
 namespace API_Calendario_CEC.Services
@@ -27,10 +29,22 @@ namespace API_Calendario_CEC.Services
             return total;
         }
 
-        public List<ReadInstrutorDto> ListarInstrutores(string? pilar, int? page)
+        public int QuantidadeTotalPesquisa(string pesquisa) {
+            return _context.Instrutores
+                .Where(instrutor => 
+                    instrutor.Nome.ToLower().Contains(pesquisa) || 
+                    instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
+                    instrutor.Email.ToLower().Contains(pesquisa) ||
+                    instrutor.Pilar.ToLower().Contains(pesquisa) ||
+                    instrutor.Disponibilidade.ToLower().Contains(pesquisa) 
+                )
+                .Count();
+        }
+
+        public List<ReadInstrutorDto> ListarInstrutores(string? pesquisa, int? page)
         {
             List<Instrutor> instrutores;
-            if (pilar == null)
+            if (pesquisa == null || pesquisa == "")
             {
                 instrutores = _context.Instrutores
                     .Where(instrutor => instrutor.DeleteAt == null)
@@ -38,9 +52,16 @@ namespace API_Calendario_CEC.Services
             }
             else
             {
+                pesquisa = pesquisa.ToLower();
+            
                 instrutores = _context.Instrutores
-                    .Where(instrutor => instrutor.DeleteAt == null &&
-                        instrutor.Pilar.ToUpper() == pilar.ToUpper())
+                    .Where(instrutor => 
+                        instrutor.Nome.ToLower().Contains(pesquisa) || 
+                        instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
+                        instrutor.Email.ToLower().Contains(pesquisa) ||
+                        instrutor.Pilar.ToLower().Contains(pesquisa) ||
+                        instrutor.Disponibilidade.ToLower().Contains(pesquisa) 
+                    )
                     .ToList();
             }
             if (instrutores != null && page != null && page != 0)
@@ -53,6 +74,14 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadInstrutorDto>>(instrutores);    
         }
 
+        public List<ReadInstrutorDto> ListarInstrutorPorPilar(string pilar) {
+            List<Instrutor> instrutores = _context.Instrutores
+                .Where(instrutor => instrutor.DeleteAt == null &&
+                    instrutor.Pilar.ToUpper() == pilar.ToUpper())
+                .ToList();
+            return _mapper.Map<List<ReadInstrutorDto>>(instrutores);
+        }
+
         //GET ID
         public ReadInstrutorDto RecuperarInstrutorPorId(int id)
         {
@@ -62,7 +91,6 @@ namespace API_Calendario_CEC.Services
             if (instrutor == null) return null;
             return _mapper.Map<ReadInstrutorDto>(instrutor); 
         }
-
 
         //POST
         public Instrutor CriarInstrutor(CreateInstrutorDto createInstrutorDto)
