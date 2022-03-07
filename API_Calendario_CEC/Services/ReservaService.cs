@@ -86,23 +86,39 @@ namespace API_Calendario_CEC.Services
                     createReservaDto.Id_Local,
                     createReservaDto.DataInicio.ToString("yyyy-MM-dd"), 
                     createReservaDto.HoraInicio, createReservaDto.HoraFim
-                );    
-                
-            if (
-                validaInstrutor != null || 
-                validaLocal != null
-            ) return Result.Fail("Falhou");
+                );
+            
+            List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
+
+            validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
+            validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+
+            //List<string> errosReserva = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
+
+            //if (errosReserva.Count != 0)
+            //{
+            //    return Result.Ok().WithErrors(errosReserva);
+            //}
 
             Reserva reserva = _mapper.Map<Reserva>(createReservaDto);
             _context.Reservas.Add(reserva);
 
             if (createReservaDto.Id_Turma != 0)
             {
-                var instrutor = _instrutorService.RecuperarInstrutorPorId(createReservaDto.Id_Instrutor) == null;
-                var turma = _turmaService.RecuperarTurmaPorId(createReservaDto.Id_Turma) == null;
-                var disciplina = _disciplinaService.RecuperarDisciplinaPorId(createReservaDto.Id_Disciplina) == null;
+                Reserva validaTurma = _context
+                .validaEvento(
+                    0,
+                    "aulas",
+                    "Id_turma",
+                    createReservaDto.Id_Turma,
+                    createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
+                    createReservaDto.HoraInicio, createReservaDto.HoraFim
+                );
+                bool instrutor = _instrutorService.RecuperarInstrutorPorId(createReservaDto.Id_Instrutor) == null;
+                bool turma = _turmaService.RecuperarTurmaPorId(createReservaDto.Id_Turma) == null;
+                bool disciplina = _disciplinaService.RecuperarDisciplinaPorId(createReservaDto.Id_Disciplina) == null;
 
-                List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
+                validacao.Add(new ValidacaoRequest(validaTurma != null, "Turma ocupada neste horário"));
                 validacao.Add(new ValidacaoRequest(instrutor, "Instrutor não existe"));
                 validacao.Add(new ValidacaoRequest(turma, "Turma não existe"));
                 validacao.Add(new ValidacaoRequest(disciplina, "Disciplina não existe"));
