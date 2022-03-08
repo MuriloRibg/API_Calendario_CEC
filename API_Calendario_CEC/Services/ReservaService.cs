@@ -37,6 +37,7 @@ namespace API_Calendario_CEC.Services
             List<Reserva> reservas;
             if (data != null)
             {
+                Console.WriteLine(data);
                 DateTime dataQuery = DateTime.Parse(data);
                 reservas = _context.Reservas
                     .Where(r => r.DataInicio.Equals(dataQuery))
@@ -92,13 +93,6 @@ namespace API_Calendario_CEC.Services
 
             validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
             validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
-
-            //List<string> errosReserva = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
-
-            //if (errosReserva.Count != 0)
-            //{
-            //    return Result.Ok().WithErrors(errosReserva);
-            //}
 
             Reserva reserva = _mapper.Map<Reserva>(createReservaDto);
             _context.Reservas.Add(reserva);

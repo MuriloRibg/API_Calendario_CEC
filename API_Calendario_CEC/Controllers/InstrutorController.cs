@@ -19,7 +19,7 @@ namespace API_Calendario_CEC.Controllers
             _instrutorService = instrutorService;
         }
 
-        [HttpGet("{pilar}")]
+        [HttpGet("pilar/{pilar}")]
         public IActionResult ListarInstrutoresPorPilar(string pilar) {
             List<ReadInstrutorDto> instrutoresPorPilar = _instrutorService.ListarInstrutorPorPilar(pilar);
             if (instrutoresPorPilar == null) return NotFound();
