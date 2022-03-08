@@ -19,10 +19,21 @@ namespace API_Calendario_CEC.Services {
         }
 
         //GET
-        public List<ReadLocaisDto> ListarLocais() {
-            List<Local> locais =_context.Locais
-                .Where(instrutor => instrutor.DeleteAt == null)
-                .ToList();
+        public List<ReadLocaisDto> ListarLocais(int capacidade) {
+
+            List<Local> locais;
+            if (capacidade == null || capacidade == 0)
+            {
+                locais = _context.Locais
+                    .Where(local => local.DeleteAt == null)
+                    .ToList();
+            }
+            else
+            {
+                locais = _context.Locais
+                    .Where(local => local.DeleteAt == null && local.Capacidade >= capacidade)
+                    .ToList();
+            }
             if (locais == null) return null;
             return _mapper.Map<List<ReadLocaisDto>>(locais);
         }

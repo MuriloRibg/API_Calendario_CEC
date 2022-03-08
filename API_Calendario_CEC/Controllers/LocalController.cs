@@ -19,8 +19,8 @@ namespace API_Calendario_CEC.Controllers {
         }
 
         [HttpGet]
-        public IActionResult ListarLocais() {
-            List<ReadLocaisDto> locais = _localService.ListarLocais();
+        public IActionResult ListarLocais([FromQuery] int capacidade) {
+            List<ReadLocaisDto> locais = _localService.ListarLocais(capacidade);
             if (locais == null) return NotFound();
             return Ok(locais);
         }
