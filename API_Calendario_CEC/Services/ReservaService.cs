@@ -40,6 +40,7 @@ namespace API_Calendario_CEC.Services
             List<Reserva> reservas;
             if (data != null)
             {
+                Console.WriteLine(data);
                 DateTime dataQuery = DateTime.Parse(data);
                 reservas = _context.Reservas
                     .Where(r => r.DataInicio.Equals(dataQuery))
