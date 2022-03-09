@@ -1,4 +1,6 @@
-﻿using API_Calendario_CEC.Data.Dto.Reservas;
+﻿using API_Calendario_CEC.Data.Dto.Aulas;
+using API_Calendario_CEC.Data.Dto.Eventos;
+using API_Calendario_CEC.Data.Dto.Reservas;
 using API_Calendario_CEC.Data.Request;
 using API_Calendario_CEC.Services;
 using FluentResults;
@@ -39,6 +41,14 @@ namespace API_Calendario_CEC.Controllers
         public IActionResult CriarReserva([FromBody] CreateReservaDto createReservaDto)
         {
             Result resultado = _reservaService.criaReserva(createReservaDto);
+            if (resultado.IsFailed) return BadRequest(resultado.Reasons);
+            return Ok(resultado.Reasons);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult AtualizarReserva([FromBody] UpdateReservaDto reservaDto, int id)      
+        {
+            Result resultado = _reservaService.AtualizaReserva(reservaDto, id);
             if (resultado.IsFailed) return BadRequest(resultado.Reasons);
             return Ok(resultado.Reasons);
         }

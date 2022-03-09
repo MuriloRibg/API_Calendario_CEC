@@ -3,6 +3,7 @@ using API_Calendario_CEC.Data.Dto.Aulas;
 using API_Calendario_CEC.Data.Dto.Reservas;
 using API_Calendario_CEC.Models;
 using AutoMapper;
+using FluentResults;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,11 +13,9 @@ namespace API_Calendario_CEC.Services
     {
         private AppDbContext _context;
         private IMapper _mapper;
-        private ReservaService _reservaService;
 
-        public AulaService(AppDbContext context, IMapper mapper,ReservaService reservaService)
+        public AulaService(AppDbContext context, IMapper mapper)
         {
-            _reservaService = reservaService;
             _context = context;
             _mapper = mapper;
         }
@@ -33,6 +32,19 @@ namespace API_Calendario_CEC.Services
             _context.Add(aula);
             _context.SaveChanges();
             return _mapper.Map<ReadAulaDto>(aula);
+        }
+
+        public Result AtualizaAula(UpdateAulaDto updateAulaDto, int id) {
+            Aula aula = _context.Aulas.FirstOrDefault(aula => aula.Id == id);
+                
+            if (aula == null) {
+                return Result.Fail("Aula não encontrada!");
+            }
+            
+            _mapper.Map(updateAulaDto, aula);
+            _context.SaveChanges();
+
+            return Result.Ok();
         }
 
     }

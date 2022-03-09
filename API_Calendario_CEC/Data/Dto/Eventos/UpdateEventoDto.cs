@@ -4,10 +4,12 @@ namespace API_Calendario_CEC.Data.Dto.Eventos
 {
     public class UpdateEventoDto
     {
+
         [Required(ErrorMessage = "O campo Id_Instrutor é obrigatório!")]
         public int Id_Instrutor { get; set; }
 
         [Required(ErrorMessage = "O campo Id_Reserva é obrigatório!")]
         public int Id_Reserva { get; set; }
+        
     }
 }

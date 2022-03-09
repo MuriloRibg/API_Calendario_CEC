@@ -189,7 +189,7 @@ namespace API_Calendario_CEC.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataInicio")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<string>("HoraFim")
                         .IsRequired()

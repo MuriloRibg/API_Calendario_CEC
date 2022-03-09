@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Calendario_CEC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220223000226_Tabelas")]
-    partial class Tabelas
+    [Migration("20220309152912_Tabela")]
+    partial class Tabela
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -191,7 +191,7 @@ namespace API_Calendario_CEC.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataInicio")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<string>("HoraFim")
                         .IsRequired()

@@ -23,13 +23,16 @@ namespace API_Calendario_CEC.Services
         private TurmaService _turmaService;
         private DisciplinaService _disciplinaService;
 
-        public ReservaService(AppDbContext context, IMapper mapper, InstrutorService instrutor, DisciplinaService disiciplina, TurmaService turma)
+        private AulaService _aulaService;
+
+        public ReservaService(AppDbContext context, IMapper mapper, InstrutorService instrutor, DisciplinaService disiciplina, TurmaService turma, AulaService aulaService)
         {
             _context = context;
             _mapper = mapper;
             _instrutorService = instrutor;
             _turmaService = turma;
             _disciplinaService = disiciplina;
+            _aulaService = aulaService;
         }
 
         public List<ReadReservaDto> ListarReservas(string? data)
@@ -50,6 +53,8 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadReservaDto>>(reservas);
         }
 
+        
+
         public List<FullCalendarRequest> ListarReservasCalendario()
         {
             List<Reserva> reservas = _context.Reservas.ToList();
@@ -65,6 +70,79 @@ namespace API_Calendario_CEC.Services
                 fullCalendar.Add(new FullCalendarRequest(reserva.Titulo, start, end, cor));
             }
             return fullCalendar;
+        }
+
+        public Result AtualizaReserva(UpdateReservaDto reservaUpdate, int id)
+        {
+            Reserva validaLocal = _context
+                .validaEvento(
+                    id, 
+                    "aulas", 
+                    "Id_local", 
+                    reservaUpdate.Id_Local,
+                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"), 
+                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                );
+
+            List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
+
+            validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+
+            Reserva reserva = _context.Reservas.FirstOrDefault(reserva => reserva.Id == id);
+            
+            if (reserva == null) {
+                Result.Fail("Reserva não encontrada!");
+            }
+            
+            _mapper.Map(reservaUpdate, reserva);
+
+            if (reservaUpdate.TipoEvento == "Aula") {
+                
+                UpdateAulaDto aulaUpdate = new UpdateAulaDto(
+                   reservaUpdate.Id_Aula,
+                   reservaUpdate.Id_Instrutor,
+                   reservaUpdate.Id_Turma,
+                   reservaUpdate.Id_Disciplina
+                );
+                
+                Reserva validaInstrutor = _context.validaEvento(
+                    id, 
+                    "aulas", 
+                    "Id_instrutor", 
+                    aulaUpdate.Id_Instrutor, 
+                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"), 
+                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                );
+
+                Reserva validaTurma = _context.validaEvento(
+                    id,
+                    "aulas",
+                    "Id_turma",
+                    aulaUpdate.Id_Turma,
+                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"), 
+                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                );
+
+                validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
+                validacao.Add(new ValidacaoRequest(validaTurma != null, "Turma ocupada neste horário"));
+
+                List<string> erros = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
+
+                if (erros.Count != 0)
+                {
+                    return Result.Ok().WithErrors(erros);
+                }
+                
+                //salva a reserva antes de começar a atualiza a aula relacionada
+                _context.SaveChanges();
+                
+                Result resultado = _aulaService.AtualizaAula(aulaUpdate, aulaUpdate.Id);
+                if (resultado.IsFailed) {
+                    return Result.Fail("Aula não encontrada!");
+                }
+            }
+            
+            return Result.Ok().WithSuccess("Sucessooooo!");
         }
 
         public Result criaReserva(CreateReservaDto createReservaDto)
@@ -92,13 +170,6 @@ namespace API_Calendario_CEC.Services
 
             validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
             validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
-
-            //List<string> errosReserva = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
-
-            //if (errosReserva.Count != 0)
-            //{
-            //    return Result.Ok().WithErrors(errosReserva);
-            //}
 
             Reserva reserva = _mapper.Map<Reserva>(createReservaDto);
             _context.Reservas.Add(reserva);
@@ -157,6 +228,7 @@ namespace API_Calendario_CEC.Services
                 _context.SaveChanges();
             }
             return Result.Ok().WithSuccess("Adicionado com sucesso!");
-        }        
+        }   
+        
     }
 }
