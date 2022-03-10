@@ -19,14 +19,6 @@ namespace API_Calendario_CEC.Controllers
             _instrutorService = instrutorService;
         }
 
-        [HttpGet("pilar/{pilar}")]
-        public IActionResult ListarInstrutoresPorPilar(string pilar) {
-            List<ReadInstrutorDto> instrutoresPorPilar = _instrutorService.ListarInstrutorPorPilar(pilar);
-            if (instrutoresPorPilar == null) return NotFound();
-
-            return Ok(instrutoresPorPilar);
-        }
-
         [HttpGet]
         public IActionResult ListarInstrutores([FromQuery] string pesquisa, [FromQuery] int page)
         {
@@ -34,7 +26,7 @@ namespace API_Calendario_CEC.Controllers
             List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutores(pesquisa, page);
             if (instrutores == null) return NotFound();
            
-            int qtdTotalInstrutores = 0;
+            int qtdTotalInstrutores;
             
             if (pesquisa == null || pesquisa == "") {
                 qtdTotalInstrutores = _instrutorService.QuantidadeTotalInstrutores();
@@ -47,6 +39,15 @@ namespace API_Calendario_CEC.Controllers
                 instrutores,
                 qtdTotalInstrutores
             });
+        }
+
+        [HttpGet("pilar/{pilar}")]
+        public IActionResult ListarInstrutoresPorPilar(string pilar)
+        {
+            List<ReadInstrutorDto> instrutoresPorPilar = _instrutorService.ListarInstrutorPorPilar(pilar);
+            if (instrutoresPorPilar == null) return NotFound();
+
+            return Ok(instrutoresPorPilar);
         }
 
         [HttpGet("{id}")]

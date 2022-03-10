@@ -19,12 +19,34 @@ namespace API_Calendario_CEC.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListarDisciplinas([FromQuery] string? pilar, [FromQuery] int? page = 0)
+        public IActionResult ListarDisciplinas([FromQuery] string pesquisa, [FromQuery] int page)
         {
-            List<ReadDisciplinaDto> disciplinas = _disciplinaService.listarDisciplinas(pilar, page);
+            List<ReadDisciplinaDto> disciplinas = _disciplinaService.ListarDisciplinas(pesquisa, page);
             if(disciplinas == null) return NotFound();
-            int qtdTotalDisciplinas = _disciplinaService.QuantidadeTotalDisciplinas();
-            return Ok(new { disciplinas, qtdTotalDisciplinas});
+
+            int qtdTotalDisciplinas;
+
+            if (pesquisa == null || pesquisa == "")
+            {
+                qtdTotalDisciplinas =  _disciplinaService.QuantidadeTotalDisciplinas();
+            }
+            else
+            {
+                qtdTotalDisciplinas = _disciplinaService.QuantidadeTotalPesquisa(pesquisa);
+            }
+            
+            return Ok(new {
+                disciplinas,
+                qtdTotalDisciplinas
+            });
+        }
+
+        [HttpGet("pilar/{pilar}")]
+        public IActionResult ListarDisciplinasPorPilar(string pilar)
+        {
+            List<ReadDisciplinaDto> disciplinaDtos = _disciplinaService.ListarDisciplinasPorPilar(pilar);
+            if (disciplinaDtos == null) return NotFound();
+            return Ok(disciplinaDtos);
         }
 
         [HttpGet("{id}")]
@@ -33,6 +55,14 @@ namespace API_Calendario_CEC.Controllers
             ReadDisciplinaDto disciplinaDto = _disciplinaService.RecuperarDisciplinaPorId(id);
             if(disciplinaDto == null) return NotFound();
             return Ok(disciplinaDto);
+        }
+
+        [HttpGet("validar/{nomeDisciplina}")]
+        public IActionResult VerificarNomeDisciplina(string nomeDisciplina)
+        {
+            Result<Disciplina> resultado = _disciplinaService.VerificarNomeDisciplina(nomeDisciplina);
+            return Ok(resultado.Value);
+            
         }
 
         [HttpPost]

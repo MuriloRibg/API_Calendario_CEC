@@ -26,7 +26,6 @@ namespace API_Calendario_CEC.Services
             IEnumerable<Pilar> queryLastNames = ( from Pilares in _context.Pilares
                                                 select Pilares).Distinct().ToList();
 
-            Console.WriteLine(queryLastNames);
             List<string> pilares = _context.Pilares.Select(pilar => pilar.NomePilar).Distinct().ToList();
             if (pilares == null) return null;
             return pilares;

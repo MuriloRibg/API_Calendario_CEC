@@ -21,11 +21,27 @@ namespace API_Calendario_CEC.Services
             _mapper = mapper;
         }
 
+        public int QuantidadeTotalDisciplinas()
+        {
+            int quantidadeTotal = _context.Disciplinas
+                .Where(disciplina => disciplina.DeleteAt == null).Count();
+            return quantidadeTotal;
+        }
+
+        public int QuantidadeTotalPesquisa(string pesquisa)
+        {
+            return _context.Disciplinas
+               .Where(disciplina =>
+                   disciplina.Nome.Contains(pesquisa) ||
+                   disciplina.Pilar.Contains(pesquisa)
+                   ).Count();
+        }
+
         //GET
-        public List<ReadDisciplinaDto> listarDisciplinas(string? pilar, int? page)
+        public List<ReadDisciplinaDto> ListarDisciplinas(string? pesquisa, int? page)
         {
             List<Disciplina> disciplinas;
-            if (pilar == null)
+            if (pesquisa == null || pesquisa == "")
             {
                 disciplinas = _context.Disciplinas
                     .Where(disciplina => disciplina.DeleteAt == null)
@@ -33,10 +49,13 @@ namespace API_Calendario_CEC.Services
                 
             }
             else {
+                pesquisa = pesquisa.ToLower();
+
                 disciplinas = _context.Disciplinas
-                    .Where(disciplina => disciplina.DeleteAt == null
-                    && disciplina.Pilar.ToUpper() == pilar.ToUpper())
-                    .ToList();
+                    .Where(disciplina =>
+                        disciplina.Nome.Contains(pesquisa) ||
+                        disciplina.Pilar.Contains(pesquisa)
+                        ).ToList();
             }
             if (disciplinas != null && page != null && page != 0)
             {
@@ -48,12 +67,23 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas);
         }
 
-        public int QuantidadeTotalDisciplinas()
+        public Result<Disciplina> VerificarNomeDisciplina(string nomeDisciplina)
         {
-            int quantidadeTotal = _context.Disciplinas
-                .Where(disciplina => disciplina.DeleteAt == null).Count();
-            return quantidadeTotal;
+            Disciplina disciplina = _context.Disciplinas
+                .FirstOrDefault(disciplina => disciplina.DeleteAt == null &&
+                    disciplina.Nome.ToUpper() == nomeDisciplina.ToUpper()
+                );
+            return Result.Ok(disciplina).ToResult(d => d);            
         }
+
+        public List<ReadDisciplinaDto> ListarDisciplinasPorPilar(string pilar)
+        {
+            List<Disciplina> disciplinas = _context.Disciplinas
+                .Where(disciplina => disciplina.Pilar.ToUpper() == pilar.ToUpper()).ToList();
+            if (disciplinas == null) return null;
+            return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas);
+        }
+
 
         //GET ID
         public ReadDisciplinaDto RecuperarDisciplinaPorId(int id)
