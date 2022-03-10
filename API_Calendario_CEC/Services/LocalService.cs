@@ -6,6 +6,7 @@ using API_Calendario_CEC.Data.Dto.Locais;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
+using PagedList;
 
 namespace API_Calendario_CEC.Services {
     public class LocalService {
@@ -18,11 +19,31 @@ namespace API_Calendario_CEC.Services {
             _mapper = mapper;
         }
 
+        // Retorna quantidade total de locais
+        public int QuantidadeTotalLocais()
+        {
+            int total = _context.Locais.Where(local => local.DeleteAt == null).Count();
+            return total;
+        }
+
+        public int QuantidadeTotalPesquisa(string pesquisa)
+        {
+            return _context.Locais
+                    .Where(local => local.DeleteAt == null &&
+                        (
+                            local.Capacidade.ToString().Contains(pesquisa) ||
+                            local.Nome.ToLower().Contains(pesquisa)
+                        )
+                    )
+                    .Count();
+        }
+
+
         //GET
-        public List<ReadLocaisDto> ListarLocais(int capacidade) {
+        public List<ReadLocaisDto> ListarLocais(string? pesquisa, int? page) {
 
             List<Local> locais;
-            if (capacidade == null || capacidade == 0)
+            if (pesquisa == null || pesquisa == "")
             {
                 locais = _context.Locais
                     .Where(local => local.DeleteAt == null)
@@ -31,10 +52,20 @@ namespace API_Calendario_CEC.Services {
             else
             {
                 locais = _context.Locais
-                    .Where(local => local.DeleteAt == null && local.Capacidade >= capacidade)
+                    .Where(local => local.DeleteAt == null && 
+                        (
+                            local.Capacidade.ToString().Contains(pesquisa) ||
+                            local.Nome.ToLower().Contains(pesquisa)
+                        )
+                    )
                     .ToList();
             }
-            if (locais == null) return null;
+            if (locais != null && page != null && page != 0)
+            {
+                int pageSize = 6;
+                int currentPage = (page ?? 1);
+                return _mapper.Map<List<ReadLocaisDto>>(locais.ToPagedList(currentPage, pageSize));
+            }
             return _mapper.Map<List<ReadLocaisDto>>(locais);
         }
         
