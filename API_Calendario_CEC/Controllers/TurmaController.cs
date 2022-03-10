@@ -18,12 +18,32 @@ namespace API_Calendario_CEC.Controllers
             _turmaService = turmaService;
         }
 
+        [HttpGet("pilar/{pilar}")]
+        public IActionResult ListarTurmasPorPilar(string pilar) {
+            List<ReadTurmasDto> turmasPorPilar = _turmaService.ListarTurmaPorPilar(pilar);
+            if (turmasPorPilar == null) return NotFound();
+            return Ok(turmasPorPilar);  
+        }
+
         [HttpGet]
-        public IActionResult ListarTurmas([FromQuery] string? pilar)
+        public IActionResult ListarTurmas([FromQuery] string pesquisa, [FromQuery] int page) 
         {
-            List<ReadTurmasDto> turmas = _turmaService.ListarTurmas(pilar);
-            if(turmas == null) return NotFound();
-            return Ok(turmas);
+            List<ReadTurmasDto> turmas = _turmaService.ListarTurmas(pesquisa, page);
+            if (turmas == null) return NotFound();
+
+            int qtdTotalTurmas = 0;
+
+            if (pesquisa == null || pesquisa == "") {
+                qtdTotalTurmas = _turmaService.QuantidadeTotalTurmas();
+            }
+            else {
+                qtdTotalTurmas = _turmaService.QuantidadeTotalPesquisa(pesquisa);
+            }
+
+            return Ok(new {
+                turmas,
+                qtdTotalTurmas
+            });
         }
 
         [HttpGet("{id}")]

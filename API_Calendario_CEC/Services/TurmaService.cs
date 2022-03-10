@@ -6,7 +6,7 @@ using API_Calendario_CEC.Data.Dto;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
-
+using PagedList;
 
 namespace API_Calendario_CEC.Services
 {
@@ -21,11 +21,23 @@ namespace API_Calendario_CEC.Services
             _mapper = mapper;
         }
 
+        public int QuantidadeTotalTurmas() {
+            int total = _context.Turmas.Where(turma => turma.DeleteAt == null).Count();
+            return total;
+        }
+
+        public int QuantidadeTotalPesquisa(string pesquisa) {
+            return _context.Turmas.Where(turma => 
+                turma.Nome.ToLower().Contains(pesquisa)
+            )
+            .Count();
+        }
+
         //GET
-        public List<ReadTurmasDto> ListarTurmas(string? pilar)
+        public List<ReadTurmasDto> ListarTurmas(string? pesquisa, int? page)
         {
             List<Turma> turmas;
-            if (pilar == null)
+            if (pesquisa == null || pesquisa == "")
             {
                 turmas = _context.Turmas
                     .Where(turma => turma.DeleteAt == null)
@@ -33,16 +45,33 @@ namespace API_Calendario_CEC.Services
             }
             else
             {
+                pesquisa = pesquisa.ToLower();
+                
                 turmas = _context.Turmas
-                    .Where(turma => turma.DeleteAt == null &&
-                    turma.Pilar.NomePilar.ToUpper() == pilar.ToUpper())
+                    .Where(turma => 
+                        turma.Nome.ToLower().Contains(pesquisa) ||
+                        turma.Pilar.NomePilar.ToLower().Contains(pesquisa) ||
+                        turma.Pilar.Categoria.ToLower().Contains(pesquisa)
+                    )
                     .ToList();
             }
-            if (turmas != null)
+
+            if (turmas != null && page != null && page != 0)
             {
-                return _mapper.Map<List<ReadTurmasDto>>(turmas);
-            };
-            return null;
+                int pageSize = 6;
+                int currentPage = (page ?? 1);
+                return _mapper.Map<List<ReadTurmasDto>>(turmas.ToPagedList(currentPage, pageSize));
+            }
+
+            return _mapper.Map<List<ReadTurmasDto>>(turmas);
+        }
+
+        public List<ReadTurmasDto> ListarTurmaPorPilar(string? pilar) {
+            List<Turma> turmas = _context.Turmas
+                .Where(turma => turma.DeleteAt == null &&
+                    turma.Pilar.NomePilar.ToUpper() == pilar.ToUpper())
+                .ToList();
+            return _mapper.Map<List<ReadTurmasDto>>(turmas);
         }
 
         //GET ID
