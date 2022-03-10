@@ -61,8 +61,10 @@ namespace API_Calendario_CEC.Controllers
         [HttpPost]
         public IActionResult CriarInstrutor([FromBody] CreateInstrutorDto createInstrutorDto)
         {
-            Instrutor instrutor = _instrutorService.CriarInstrutor(createInstrutorDto);
-            return CreatedAtAction(nameof(RecuperarInstrutorPorId), new { Id = instrutor.Id }, instrutor);
+            Result<ReadInstrutorDto> resultadoInstrutor = _instrutorService.CriarInstrutor(createInstrutorDto);
+            if(resultadoInstrutor.IsFailed) return BadRequest(resultadoInstrutor.Reasons);
+            ReadInstrutorDto instrutorCadastrado = resultadoInstrutor.Value;
+            return CreatedAtAction(nameof(RecuperarInstrutorPorId), new { Id = instrutorCadastrado.Id }, instrutorCadastrado);
         }
 
         [HttpPut("{id}")]

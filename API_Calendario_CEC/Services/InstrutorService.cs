@@ -92,7 +92,7 @@ namespace API_Calendario_CEC.Services
         }
 
         //POST
-        public Instrutor CriarInstrutor(CreateInstrutorDto createInstrutorDto)
+        public Result<ReadInstrutorDto> CriarInstrutor(CreateInstrutorDto createInstrutorDto)
         {
             Instrutor instrutorCadastrado = _context
                 .Instrutores
@@ -104,9 +104,10 @@ namespace API_Calendario_CEC.Services
 
                 _context.Add(instrutor);    
                 _context.SaveChanges();
-                return instrutor;
+                ReadInstrutorDto readInstrutorDto = _mapper.Map<ReadInstrutorDto>(instrutor);
+                return Result.Ok(readInstrutorDto).ToResult(i => i);
             }
-            return null;
+            return Result.Fail($"Email já cadastrado!");
         }
 
         //PUT

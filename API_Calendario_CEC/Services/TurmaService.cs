@@ -86,7 +86,7 @@ namespace API_Calendario_CEC.Services
 
 
         //POST
-        public Turma CriarTurma(CreateTurmasDto createTurmaDto)
+        public Result<ReadTurmasDto> CriarTurma(CreateTurmasDto createTurmaDto)
         {
             Turma turmaCadastrado = _context
                 .Turmas
@@ -97,9 +97,10 @@ namespace API_Calendario_CEC.Services
                 Turma turma = _mapper.Map<Turma>(createTurmaDto);                
                 _context.Add(turma);    
                 _context.SaveChanges();
-                return turma;
+                ReadTurmasDto readTurmaDto = _mapper.Map<ReadTurmasDto>(turma);
+                return Result.Ok(readTurmaDto).ToResult(s => s);
             }
-            return null;
+            return Result.Fail($"Turma {turmaCadastrado.Nome} já cadastrada");
         }
 
         //PUT

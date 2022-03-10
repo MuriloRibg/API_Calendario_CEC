@@ -4,6 +4,7 @@ using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
 using Microsoft.AspNetCore.Mvc;
 using FluentResults;
+using System;
 
 namespace API_Calendario_CEC.Controllers
 {
@@ -57,8 +58,10 @@ namespace API_Calendario_CEC.Controllers
         [HttpPost]
         public IActionResult CriaTurma([FromBody] CreateTurmasDto turmaDto)
         {
-            Turma turma = _turmaService.CriarTurma(turmaDto);
-            return CreatedAtAction(nameof(RecuperarTurmaPorId), new { Id = turma.Id }, turma);
+            Result<ReadTurmasDto> resultadoTurma = _turmaService.CriarTurma(turmaDto);
+            if(resultadoTurma.IsFailed) return BadRequest(resultadoTurma.Reasons);
+            ReadTurmasDto turmaCadastrada = resultadoTurma.Value;
+            return CreatedAtAction(nameof(RecuperarTurmaPorId), new { Id = turmaCadastrada.Id }, turmaCadastrada);
         }
 
         [HttpPut("{id}")]
