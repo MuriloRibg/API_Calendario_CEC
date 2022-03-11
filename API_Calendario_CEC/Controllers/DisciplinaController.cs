@@ -41,8 +41,8 @@ namespace API_Calendario_CEC.Controllers
             });
         }
 
-        [HttpGet("pilar/{pilar}")]
-        public IActionResult ListarDisciplinasPorPilar(string pilar)
+        [HttpGet("pilar")]
+        public IActionResult ListarDisciplinasPorPilar([FromQuery] string pilar)
         {
             List<ReadDisciplinaDto> disciplinaDtos = _disciplinaService.ListarDisciplinasPorPilar(pilar);
             if (disciplinaDtos == null) return NotFound();
@@ -69,7 +69,7 @@ namespace API_Calendario_CEC.Controllers
         public IActionResult CriaDisciplina([FromBody] CreateDisciplinaDto disciplinaDto)
         {
             Result<Disciplina> resultado = _disciplinaService.CriaDisciplina(disciplinaDto);
-            if (resultado.IsFailed) return NotFound(resultado.Value);
+            if (resultado.IsFailed) return NotFound(resultado.Reasons);
 
             return CreatedAtAction(
                 nameof(RecuperarDisciplinaPorId), new { Id = resultado.Value.Id }, resultado.Value);

@@ -101,7 +101,7 @@ namespace API_Calendario_CEC.Services
             Disciplina disciplina = _context.Disciplinas
                 .FirstOrDefault(disciplina => disciplina.DeleteAt == null &&
                 disciplina.Nome.ToUpper() == disciplinaDto.Nome.ToUpper());
-            if(disciplina != null)
+            if(disciplina == null)
             {
                 Disciplina disciplinaCadastrado = _mapper.Map<Disciplina>(disciplinaDto);
                 _context.Add(disciplinaCadastrado);

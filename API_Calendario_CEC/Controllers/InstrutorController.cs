@@ -41,8 +41,8 @@ namespace API_Calendario_CEC.Controllers
             });
         }
 
-        [HttpGet("pilar/{pilar}")]
-        public IActionResult ListarInstrutoresPorPilar(string pilar)
+        [HttpGet("pilar")]
+        public IActionResult ListarInstrutoresPorPilar([FromQuery] string pilar)
         {
             List<ReadInstrutorDto> instrutoresPorPilar = _instrutorService.ListarInstrutorPorPilar(pilar);
             if (instrutoresPorPilar == null) return NotFound();
