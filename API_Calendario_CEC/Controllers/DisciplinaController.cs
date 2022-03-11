@@ -60,16 +60,19 @@ namespace API_Calendario_CEC.Controllers
         [HttpGet("validar/{nomeDisciplina}")]
         public IActionResult VerificarNomeDisciplina(string nomeDisciplina)
         {
-            Result<Disciplina> resultado = _disciplinaService.VerificarNomeDisciplina(nomeDisciplina);
-            return Ok(resultado.Value);
-            
+            Result resultado = _disciplinaService.VerificarNomeDisciplina(nomeDisciplina);
+            if (resultado.IsFailed) return Ok(new { resultado.Reasons, status = true });
+            return Ok(new { resultado.Reasons, status = false }); 
         }
 
         [HttpPost]
         public IActionResult CriaDisciplina([FromBody] CreateDisciplinaDto disciplinaDto)
         {
-            Disciplina disciplina = _disciplinaService.CriaDisciplina(disciplinaDto);
-            return CreatedAtAction(nameof(RecuperarDisciplinaPorId), new { Id = disciplina.Id }, disciplina);
+            Result<Disciplina> resultado = _disciplinaService.CriaDisciplina(disciplinaDto);
+            if (resultado.IsFailed) return NotFound(resultado.Value);
+
+            return CreatedAtAction(
+                nameof(RecuperarDisciplinaPorId), new { Id = resultado.Value.Id }, resultado.Value);
         }
 
         [HttpPut("{id}")]

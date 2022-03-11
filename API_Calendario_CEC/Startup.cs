@@ -51,6 +51,7 @@ namespace API_Calendario_CEC
         // Este método é chamado pelo tempo de execução. Use este método para configurar o pipeline de solicitação HTTP.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
             app.UseCors(c =>
                 c.WithOrigins("*")
                  .WithMethods("PUT", "DELETE", "GET", "POST")

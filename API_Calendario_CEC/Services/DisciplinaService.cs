@@ -67,13 +67,14 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas);
         }
 
-        public Result<Disciplina> VerificarNomeDisciplina(string nomeDisciplina)
+        public Result VerificarNomeDisciplina(string nomeDisciplina)
         {
             Disciplina disciplina = _context.Disciplinas
                 .FirstOrDefault(disciplina => disciplina.DeleteAt == null &&
                     disciplina.Nome.ToUpper() == nomeDisciplina.ToUpper()
                 );
-            return Result.Ok(disciplina).ToResult(d => d);            
+            if (disciplina == null) return Result.Ok();
+            return Result.Fail("Nome em uso!");
         }
 
         public List<ReadDisciplinaDto> ListarDisciplinasPorPilar(string pilar)
@@ -95,12 +96,19 @@ namespace API_Calendario_CEC.Services
         }
 
         //POST
-        public Disciplina CriaDisciplina(CreateDisciplinaDto disciplinaDto)
+        public Result<Disciplina> CriaDisciplina(CreateDisciplinaDto disciplinaDto)
         {
-            Disciplina disciplinaCadastrado = _mapper.Map<Disciplina>(disciplinaDto);
-            _context.Add(disciplinaCadastrado);
-            _context.SaveChanges();
-            return disciplinaCadastrado;
+            Disciplina disciplina = _context.Disciplinas
+                .FirstOrDefault(disciplina => disciplina.DeleteAt == null &&
+                disciplina.Nome.ToUpper() == disciplinaDto.Nome.ToUpper());
+            if(disciplina != null)
+            {
+                Disciplina disciplinaCadastrado = _mapper.Map<Disciplina>(disciplinaDto);
+                _context.Add(disciplinaCadastrado);
+                _context.SaveChanges();
+                return Result.Ok(disciplinaCadastrado).ToResult(d => d);
+            }
+            return Result.Fail("Nome da disciplina está em uso!");            
         }
 
         //PUT

@@ -58,6 +58,15 @@ namespace API_Calendario_CEC.Controllers
             return Ok(instrutorDto);
         }
 
+        [HttpGet("validar/{email}")]
+        public IActionResult ValidarEmailInstrutor(string email)
+        {
+            Result resultado = _instrutorService.ValidarEmailInstrutor(email);
+            if (resultado.IsFailed) return Ok(new { resultado.Reasons, status = true });
+            return Ok(new { resultado.Reasons, status = false });
+        }
+
+
         [HttpPost]
         public IActionResult CriarInstrutor([FromBody] CreateInstrutorDto createInstrutorDto)
         {

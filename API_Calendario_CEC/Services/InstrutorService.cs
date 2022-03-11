@@ -73,6 +73,16 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadInstrutorDto>>(instrutores);    
         }
 
+        public Result ValidarEmailInstrutor(string email)
+        {
+            Instrutor instrutor = _context.Instrutores
+               .FirstOrDefault(instrutor => instrutor.DeleteAt == null &&
+                   instrutor.Email.ToUpper() == email.ToUpper()
+               );
+            if (instrutor == null) return Result.Ok();
+            return Result.Fail("Email em uso!");
+        }
+
         public List<ReadInstrutorDto> ListarInstrutorPorPilar(string pilar) {
             List<Instrutor> instrutores = _context.Instrutores
                 .Where(instrutor => instrutor.DeleteAt == null &&
