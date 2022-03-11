@@ -2,6 +2,7 @@
 using API_Calendario_CEC.Data.Dto.Eventos;
 using API_Calendario_CEC.Models;
 using AutoMapper;
+using FluentResults;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,6 +31,19 @@ namespace API_Calendario_CEC.Services
             _context.Eventos.Add(evento);
             _context.SaveChanges();
             return _mapper.Map<ReadEventoDto>(evento);
+        }
+
+        public Result DeletaEvento(int idReserva)
+        {
+            Evento evento = _context.Eventos
+                .FirstOrDefault(evento => evento.Id_Reserva == idReserva);
+
+            if (evento == null) return Result.Fail("Evento não encontrada!");
+
+            _context.Remove(evento);
+            _context.SaveChanges();
+            return Result.Ok();
+
         }
     }
 }
