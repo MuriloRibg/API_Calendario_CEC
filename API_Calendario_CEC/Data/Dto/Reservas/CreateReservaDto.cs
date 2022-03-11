@@ -32,6 +32,7 @@ namespace API_Calendario_CEC.Data.Dto.Reservas
         public int Id_Instrutor { get; set; }
         public int Id_Turma { get; set; }
         public int Id_Disciplina { get; set; }
+
         //campo caso seja evento
         public string Descricao { get; set; }
     }

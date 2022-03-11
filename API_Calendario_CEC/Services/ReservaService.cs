@@ -3,6 +3,7 @@ using API_Calendario_CEC.Data.Dto.Aulas;
 using API_Calendario_CEC.Data.Dto.Eventos;
 using API_Calendario_CEC.Data.Dto.Reservas;
 using API_Calendario_CEC.Data.Request;
+using API_Calendario_CEC.Helps;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
@@ -74,6 +75,16 @@ namespace API_Calendario_CEC.Services
 
         public Result AtualizaReserva(UpdateReservaDto reservaUpdate, int id)
         {
+            //Validando os horários
+            bool resultValidaHorario = ValidacaoHelp.ValidarHorario(
+                reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                );
+
+            if (resultValidaHorario == true)
+            {
+                return Result.Fail("Hora inicio é maior que hora fim!");
+            }
+
             Reserva validaLocal = _context
                 .validaEvento(
                     id, 
@@ -141,12 +152,22 @@ namespace API_Calendario_CEC.Services
                     return Result.Fail("Aula não encontrada!");
                 }
             }
-            
-            return Result.Ok().WithSuccess("Sucessooooo!");
+
+            return Result.Ok().WithSuccess("Adicionado com sucesso!");
         }
 
         public Result criaReserva(CreateReservaDto createReservaDto)
         {
+            //Validando os horários
+            bool resultValidaHorario = ValidacaoHelp.ValidarHorario(
+                createReservaDto.HoraInicio, createReservaDto.HoraFim
+                );
+
+            if (resultValidaHorario == true)
+            {
+                return Result.Fail("Hora inicio é maior que hora fim!");
+            }
+
             Reserva validaInstrutor = _context
                 .validaEvento(
                     0, 
