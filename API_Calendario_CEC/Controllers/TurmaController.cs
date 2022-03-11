@@ -19,8 +19,8 @@ namespace API_Calendario_CEC.Controllers
             _turmaService = turmaService;
         }
 
-        [HttpGet("pilar/{pilar}")]
-        public IActionResult ListarTurmasPorPilar(string pilar) {
+        [HttpGet("pilar")]
+        public IActionResult ListarTurmasPorPilar([FromQuery] string pilar) {
             List<ReadTurmasDto> turmasPorPilar = _turmaService.ListarTurmaPorPilar(pilar);
             if (turmasPorPilar == null) return NotFound();
             return Ok(turmasPorPilar);  
