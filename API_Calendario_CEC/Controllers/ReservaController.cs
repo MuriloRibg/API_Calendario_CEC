@@ -24,7 +24,7 @@ namespace API_Calendario_CEC.Controllers
         public IActionResult ListaReservas([FromQuery] string data)
         {
             List<ReadReservaDto> reservasDto = _reservaService.ListarReservas(data);
-            if(reservasDto == null) return NotFound();
+            if (reservasDto == null) return NotFound();
             return Ok(reservasDto);
         }
 
@@ -46,11 +46,19 @@ namespace API_Calendario_CEC.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizarReserva([FromBody] UpdateReservaDto reservaDto, int id)      
+        public IActionResult AtualizarReserva([FromBody] UpdateReservaDto reservaDto, int id)
         {
             Result resultado = _reservaService.AtualizaReserva(reservaDto, id);
             if (resultado.IsFailed) return BadRequest(resultado.Reasons);
             return Ok(resultado.Reasons);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletaReserva(int id)
+        {
+            Result resultado = _reservaService.DeletaReserva(id);
+            if(resultado.IsFailed) return BadRequest(resultado.Reasons);
+            return Ok(resultado.Reasons[0]);   
         }
     }
 }

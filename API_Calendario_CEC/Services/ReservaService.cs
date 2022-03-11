@@ -249,7 +249,23 @@ namespace API_Calendario_CEC.Services
                 _context.SaveChanges();
             }
             return Result.Ok().WithSuccess("Adicionado com sucesso!");
-        }   
+        }
+        
+        public Result DeletaReserva(int idReserva)
+        {
+            Reserva reserva = _context.Reservas
+                .FirstOrDefault(reserva => reserva.Id == idReserva);
+
+            if(reserva == null) return Result.Fail("Reserva não encontrada!");
+
+            Result resultadoDeleteAula = _aulaService.DeletaAula(idReserva);
+            if (resultadoDeleteAula.IsFailed) return Result.Fail("Erro ao excluir aula!");
+
+            _context.Remove(reserva);
+            _context.SaveChanges();
+            return Result.Ok().WithSuccess("Reserva excluida!");
+
+        }
         
     }
 }
