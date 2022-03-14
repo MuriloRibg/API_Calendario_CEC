@@ -66,6 +66,13 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<List<ReadTurmasDto>>(turmas);
         }
 
+        public Result validarNomeTurma(string nomeTurma) {
+            Turma turma = _context.Turmas.FirstOrDefault(turma => turma.DeleteAt == null 
+                && turma.Nome.ToUpper() == nomeTurma.ToUpper());
+            if (turma == null) return Result.Ok();
+            return Result.Fail("Nome de turma em uso!");
+        }   
+
         public List<ReadTurmasDto> ListarTurmaPorPilar(string? pilar) {
             List<Turma> turmas = _context.Turmas
                 .Where(turma => turma.DeleteAt == null &&

@@ -53,7 +53,14 @@ namespace API_Calendario_CEC.Controllers
             ReadTurmasDto turmaDto = _turmaService.RecuperarTurmaPorId(id);
             if(turmaDto == null) return NotFound();
             return Ok(turmaDto);
-        }        
+        }    
+
+        [HttpGet("validar/{nomeTurma}")]    
+        public IActionResult ValidarNomeTurma(string nomeTurma) {
+            Result resultado = _turmaService.validarNomeTurma(nomeTurma);
+            if (resultado.IsFailed) return Ok(new { resultado.Reasons, status = true });
+            return Ok(new { resultado.Reasons, status = false });
+        }
 
         [HttpPost]
         public IActionResult CriaTurma([FromBody] CreateTurmasDto turmaDto)
