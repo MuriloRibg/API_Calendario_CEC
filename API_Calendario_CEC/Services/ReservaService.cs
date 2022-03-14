@@ -25,8 +25,9 @@ namespace API_Calendario_CEC.Services
         private DisciplinaService _disciplinaService;
 
         private AulaService _aulaService;
+        private EventoService _eventoService;
 
-        public ReservaService(AppDbContext context, IMapper mapper, InstrutorService instrutor, DisciplinaService disiciplina, TurmaService turma, AulaService aulaService)
+        public ReservaService(AppDbContext context, IMapper mapper, InstrutorService instrutor, DisciplinaService disiciplina, TurmaService turma, AulaService aulaService, EventoService eventoService)
         {
             _context = context;
             _mapper = mapper;
@@ -34,6 +35,7 @@ namespace API_Calendario_CEC.Services
             _turmaService = turma;
             _disciplinaService = disiciplina;
             _aulaService = aulaService;
+            _eventoService = eventoService;
         }
 
         public List<ReadReservaDto> ListarReservas(string? data)
@@ -249,7 +251,24 @@ namespace API_Calendario_CEC.Services
                 _context.SaveChanges();
             }
             return Result.Ok().WithSuccess("Adicionado com sucesso!");
-        }   
+        }
+        
+        public Result DeletaReserva(int idReserva)
+        {
+            Reserva reserva = _context.Reservas
+                .FirstOrDefault(reserva => reserva.Id == idReserva);
+            if(reserva == null) return Result.Fail("Reserva não encontrada!");
+
+            Result resultadoDeleteAula = _aulaService.DeletaAula(idReserva);
+            Result resultadoDeleteEvento = _eventoService.DeletaEvento(idReserva);
+
+            if (resultadoDeleteAula.IsFailed && resultadoDeleteEvento.IsFailed) return Result.Fail("Erro ao excluir reserva!");
+
+            _context.Remove(reserva);
+            _context.SaveChanges();
+            return Result.Ok().WithSuccess("Reserva excluida!");
+
+        }
         
     }
 }

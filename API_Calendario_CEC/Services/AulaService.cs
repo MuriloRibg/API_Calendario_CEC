@@ -47,5 +47,18 @@ namespace API_Calendario_CEC.Services
             return Result.Ok();
         }
 
+        public Result DeletaAula(int idReserva)
+        {
+            Aula aula = _context.Aulas
+                .FirstOrDefault(aula => aula.Id_Reserva == idReserva);
+
+            if (aula == null) return Result.Fail("Aula não encontrada!");
+
+            _context.Remove(aula);
+            _context.SaveChanges();
+            return Result.Ok();
+
+        }
+
     }
 }
