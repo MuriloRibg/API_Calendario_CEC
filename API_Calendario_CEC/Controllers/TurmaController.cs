@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using API_Calendario_CEC.Data.Dto;
-using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
 using Microsoft.AspNetCore.Mvc;
 using FluentResults;
-using System;
 
 namespace API_Calendario_CEC.Controllers
 {
@@ -53,7 +51,14 @@ namespace API_Calendario_CEC.Controllers
             ReadTurmasDto turmaDto = _turmaService.RecuperarTurmaPorId(id);
             if(turmaDto == null) return NotFound();
             return Ok(turmaDto);
-        }        
+        }    
+
+        [HttpGet("validar/{nomeTurma}")]    
+        public IActionResult ValidarNomeTurma(string nomeTurma) {
+            Result resultado = _turmaService.validarNomeTurma(nomeTurma);
+            if (resultado.IsFailed) return Ok(new { resultado.Reasons, status = true });
+            return Ok(new { resultado.Reasons, status = false });
+        }
 
         [HttpPost]
         public IActionResult CriaTurma([FromBody] CreateTurmasDto turmaDto)

@@ -78,9 +78,9 @@ namespace API_Calendario_CEC.Services
         public Result ValidarEmailInstrutor(string email)
         {
             Instrutor instrutor = _context.Instrutores
-               .FirstOrDefault(instrutor => instrutor.DeleteAt == null &&
+                .FirstOrDefault(instrutor => instrutor.DeleteAt == null &&
                    instrutor.Email.ToUpper() == email.ToUpper()
-               );
+                );
             if (instrutor == null) return Result.Ok();
             return Result.Fail("Email em uso!");
         }

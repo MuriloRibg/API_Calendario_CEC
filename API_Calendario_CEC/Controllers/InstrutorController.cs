@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using API_Calendario_CEC.Data.Dto;
-using API_Calendario_CEC.Models;
 using API_Calendario_CEC.Services;
 using Microsoft.AspNetCore.Mvc;
 using FluentResults;
-using System;
 
 namespace API_Calendario_CEC.Controllers
 {

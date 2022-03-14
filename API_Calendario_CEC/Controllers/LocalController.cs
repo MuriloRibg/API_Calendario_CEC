@@ -40,6 +40,14 @@ namespace API_Calendario_CEC.Controllers {
             });
         }
 
+        [HttpGet("listar_qtd")]
+        public IActionResult RecuperarLocalPorQuantidade([FromQuery] int qtd_alunos)
+        {
+            List<ReadLocaisDto> locaisDtos = _localService.RecuperarLocalPorQuantidade(qtd_alunos);
+            if (locaisDtos == null) return NotFound();
+            return Ok(locaisDtos);
+        }
+
         [HttpGet("{id}")]
         public IActionResult RecuperarLocalPorId(int id) {
             ReadLocaisDto localDto = _localService.RecuperarLocalPorId(id);
