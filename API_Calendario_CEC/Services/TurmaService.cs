@@ -27,8 +27,13 @@ namespace API_Calendario_CEC.Services
         }
 
         public int QuantidadeTotalPesquisa(string pesquisa) {
-            return _context.Turmas.Where(turma => 
-                turma.Nome.ToLower().Contains(pesquisa)
+            return _context.Turmas.Where(turma =>
+                turma.DeleteAt == null &&
+                    (
+                        turma.Nome.ToLower().Contains(pesquisa) ||
+                        turma.Pilar.NomePilar.ToLower().Contains(pesquisa) ||
+                        turma.Pilar.Categoria.ToLower().Contains(pesquisa)
+                    )
             )
             .Count();
         }
@@ -48,10 +53,13 @@ namespace API_Calendario_CEC.Services
                 pesquisa = pesquisa.ToLower();
                 
                 turmas = _context.Turmas
-                    .Where(turma => 
-                        turma.Nome.ToLower().Contains(pesquisa) ||
-                        turma.Pilar.NomePilar.ToLower().Contains(pesquisa) ||
-                        turma.Pilar.Categoria.ToLower().Contains(pesquisa)
+                    .Where(turma =>
+                        turma.DeleteAt == null &&
+                        (
+                            turma.Nome.ToLower().Contains(pesquisa) ||
+                            turma.Pilar.NomePilar.ToLower().Contains(pesquisa) ||
+                            turma.Pilar.Categoria.ToLower().Contains(pesquisa)
+                        )
                     )
                     .ToList();
             }

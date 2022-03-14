@@ -31,12 +31,14 @@ namespace API_Calendario_CEC.Services
         public int QuantidadeTotalPesquisa(string pesquisa) {
             return _context.Instrutores
                 .Where(instrutor =>
-                    instrutor.DeleteAt == null ||
-                    instrutor.Nome.ToLower().Contains(pesquisa) || 
-                    instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
-                    instrutor.Email.ToLower().Contains(pesquisa) ||
-                    instrutor.Pilar.ToLower().Contains(pesquisa) ||
-                    instrutor.Disponibilidade.ToLower().Contains(pesquisa) 
+                    instrutor.DeleteAt == null &&
+                        (
+                            instrutor.Nome.ToLower().Contains(pesquisa) ||
+                            instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
+                            instrutor.Email.ToLower().Contains(pesquisa) ||
+                            instrutor.Pilar.ToLower().Contains(pesquisa) ||
+                            instrutor.Disponibilidade.ToLower().Contains(pesquisa)
+                        )
                 )
                 .Count();
         }
@@ -56,12 +58,14 @@ namespace API_Calendario_CEC.Services
             
                 instrutores = _context.Instrutores
                     .Where(instrutor =>
-                        instrutor.DeleteAt == null ||
-                        instrutor.Nome.ToLower().Contains(pesquisa) || 
-                        instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
-                        instrutor.Email.ToLower().Contains(pesquisa) ||
-                        instrutor.Pilar.ToLower().Contains(pesquisa) ||
-                        instrutor.Disponibilidade.ToLower().Contains(pesquisa) 
+                        instrutor.DeleteAt == null &&
+                        (
+                            instrutor.Nome.ToLower().Contains(pesquisa) ||
+                            instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
+                            instrutor.Email.ToLower().Contains(pesquisa) ||
+                            instrutor.Pilar.ToLower().Contains(pesquisa) ||
+                            instrutor.Disponibilidade.ToLower().Contains(pesquisa)
+                        ) 
                     )
                     .ToList();
             }
