@@ -30,7 +30,8 @@ namespace API_Calendario_CEC.Services
 
         public int QuantidadeTotalPesquisa(string pesquisa) {
             return _context.Instrutores
-                .Where(instrutor => 
+                .Where(instrutor =>
+                    instrutor.DeleteAt == null ||
                     instrutor.Nome.ToLower().Contains(pesquisa) || 
                     instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
                     instrutor.Email.ToLower().Contains(pesquisa) ||
@@ -54,7 +55,8 @@ namespace API_Calendario_CEC.Services
                 pesquisa = pesquisa.ToLower();
             
                 instrutores = _context.Instrutores
-                    .Where(instrutor => 
+                    .Where(instrutor =>
+                        instrutor.DeleteAt == null ||
                         instrutor.Nome.ToLower().Contains(pesquisa) || 
                         instrutor.Abreviacao.ToLower().Contains(pesquisa) ||
                         instrutor.Email.ToLower().Contains(pesquisa) ||
