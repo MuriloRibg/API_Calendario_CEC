@@ -88,9 +88,7 @@ namespace API_Calendario_CEC.Services
         //POST
         public Result<ReadTurmasDto> CriarTurma(CreateTurmasDto createTurmaDto)
         {
-            Turma turmaCadastrado = _context
-                .Turmas
-                .FirstOrDefault(turma => turma.Nome.ToUpper() == createTurmaDto.Nome.ToUpper());
+            Turma turmaCadastrado = verificaNomeTurma(_mapper.Map<Turma>(createTurmaDto));
 
             if(turmaCadastrado == null)
             {
@@ -106,6 +104,9 @@ namespace API_Calendario_CEC.Services
         //PUT
         public Result AtualizarTurma(int id, UpdateTurmasDto updateTurmaDto)
         {
+            Turma turmaCadastrado = verificaNomeTurma(_mapper.Map<Turma>(updateTurmaDto));
+            if(turmaCadastrado != null) return Result.Fail($"Turma {turmaCadastrado.Nome} já cadastrada");
+
             Turma turma = _context.Turmas
                 .FirstOrDefault(turma => turma.Id == id);
 
@@ -137,6 +138,14 @@ namespace API_Calendario_CEC.Services
             turma.DeleteAt = null;
             _context.SaveChanges();
             return Result.Ok().WithSuccess("Turma restaurado com sucesso!");
+        }
+
+        private Turma verificaNomeTurma(Turma turmaCadastro)
+        {
+            Turma turmaCadastrado = _context
+                .Turmas
+                .FirstOrDefault(turma => turma.Nome.ToUpper() == turmaCadastro.Nome.ToUpper());
+            return turmaCadastrado;
         }
     }
 }
