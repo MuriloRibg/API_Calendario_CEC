@@ -68,7 +68,15 @@ namespace API_Calendario_CEC.Services {
             }
             return _mapper.Map<List<ReadLocaisDto>>(locais);
         }
-        
+
+        public List<ReadLocaisDto> RecuperarLocalPorQuantidade(int qtd_alunos)
+        {
+            List<Local> local = _context.Locais
+                .Where(local => local.DeleteAt == null && local.Capacidade >= qtd_alunos).ToList();
+            if (local == null) return null;
+            return _mapper.Map<List<ReadLocaisDto>>(local);
+        }
+
         //GET ID
         public ReadLocaisDto RecuperarLocalPorId(int id) {
             Local local = _context.Locais
