@@ -23,11 +23,12 @@ namespace API_Calendario_CEC.Services
         private InstrutorService _instrutorService;
         private TurmaService _turmaService;
         private DisciplinaService _disciplinaService;
+        private LocalService _localService;
 
         private AulaService _aulaService;
         private EventoService _eventoService;
 
-        public ReservaService(AppDbContext context, IMapper mapper, InstrutorService instrutor, DisciplinaService disiciplina, TurmaService turma, AulaService aulaService, EventoService eventoService)
+        public ReservaService(AppDbContext context, IMapper mapper, InstrutorService instrutor, DisciplinaService disiciplina, TurmaService turma, AulaService aulaService, EventoService eventoService, LocalService localService)
         {
             _context = context;
             _mapper = mapper;
@@ -36,6 +37,7 @@ namespace API_Calendario_CEC.Services
             _disciplinaService = disiciplina;
             _aulaService = aulaService;
             _eventoService = eventoService;
+            _localService = localService;
         }
 
         public List<ReadReservaDto> ListarReservas(string? data)
@@ -109,7 +111,7 @@ namespace API_Calendario_CEC.Services
             
             _mapper.Map(reservaUpdate, reserva);
 
-            if (reservaUpdate.TipoEvento == "Aula") {
+            if (reservaUpdate.TipoEvento.ToLower() == "aula") {
                 
                 UpdateAulaDto aulaUpdate = new UpdateAulaDto(
                    reservaUpdate.Id_Aula,
@@ -153,6 +155,10 @@ namespace API_Calendario_CEC.Services
                 if (resultado.IsFailed) {
                     return Result.Fail("Aula não encontrada!");
                 }
+            }else if (reservaUpdate.TipoEvento.ToLower() == "evento")
+            {
+
+
             }
 
             return Result.Ok().WithSuccess("Adicionado com sucesso!");
@@ -170,35 +176,27 @@ namespace API_Calendario_CEC.Services
                 return Result.Fail("Hora inicio é maior que hora fim!");
             }
 
-            Reserva validaInstrutor = _context
-                .validaEvento(
-                    0, 
-                    "aulas", 
-                    "Id_instrutor", 
-                    createReservaDto.Id_Instrutor, 
-                    createReservaDto.DataInicio.ToString("yyyy-MM-dd"), 
-                    createReservaDto.HoraInicio, createReservaDto.HoraFim
-                );
-            Reserva validaLocal = _context
-                .validaEvento(
-                    0, 
-                    "aulas", 
-                    "Id_local", 
-                    createReservaDto.Id_Local,
-                    createReservaDto.DataInicio.ToString("yyyy-MM-dd"), 
-                    createReservaDto.HoraInicio, createReservaDto.HoraFim
-                );
-            
             List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
 
-            validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
-            validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+            //verifica se local existe
+            bool local = _localService.RecuperarLocalPorId(createReservaDto.Id_Local) == null;    
+            validacao.Add(new ValidacaoRequest(local, "Local não existe"));
 
             Reserva reserva = _mapper.Map<Reserva>(createReservaDto);
             _context.Reservas.Add(reserva);
+            Console.WriteLine(reserva.Id_Local);
 
-            if (createReservaDto.Id_Turma != 0)
+            if (createReservaDto.TipoEvento.ToLower() == "aula")
             {
+                Reserva validaLocal = _context
+               .validaEvento(
+                   0,
+                   "aulas",
+                   "Id_local",
+                   createReservaDto.Id_Local,
+                   createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
+                   createReservaDto.HoraInicio, createReservaDto.HoraFim
+               );
                 Reserva validaTurma = _context
                 .validaEvento(
                     0,
@@ -208,10 +206,21 @@ namespace API_Calendario_CEC.Services
                     createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
                     createReservaDto.HoraInicio, createReservaDto.HoraFim
                 );
+                Reserva validaInstrutor = _context
+                .validaEvento(
+                    0,
+                    "aulas",
+                    "Id_instrutor",
+                    createReservaDto.Id_Instrutor,
+                    createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
+                    createReservaDto.HoraInicio, createReservaDto.HoraFim
+                );
                 bool instrutor = _instrutorService.RecuperarInstrutorPorId(createReservaDto.Id_Instrutor) == null;
                 bool turma = _turmaService.RecuperarTurmaPorId(createReservaDto.Id_Turma) == null;
                 bool disciplina = _disciplinaService.RecuperarDisciplinaPorId(createReservaDto.Id_Disciplina) == null;
 
+                validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+                validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
                 validacao.Add(new ValidacaoRequest(validaTurma != null, "Turma ocupada neste horário"));
                 validacao.Add(new ValidacaoRequest(instrutor, "Instrutor não existe"));
                 validacao.Add(new ValidacaoRequest(turma, "Turma não existe"));
@@ -238,8 +247,29 @@ namespace API_Calendario_CEC.Services
                 _context.Aulas.Add(aula);
                 _context.SaveChanges();
             }
-            else if(createReservaDto.Descricao.Length != 0)
+            else if(createReservaDto.TipoEvento.ToLower() == "evento")
             {
+                Reserva validaLocal = _context
+                  .validaEvento(
+                      0,
+                      "eventos",
+                      "Id_local",
+                      createReservaDto.Id_Local,
+                      createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
+                      createReservaDto.HoraInicio, createReservaDto.HoraFim
+                  );
+                validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+
+                List<string> erros = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
+
+                if (erros.Count != 0)
+                {
+                    return Result.Ok().WithErrors(erros);
+                }
+
+                //salva a reserva antes de começar a criar a aula relacionada
+                _context.SaveChanges();
+
                 CreateEventoDto eventoDto = new CreateEventoDto(
                     createReservaDto.Id_Instrutor,
                     createReservaDto.Descricao,
