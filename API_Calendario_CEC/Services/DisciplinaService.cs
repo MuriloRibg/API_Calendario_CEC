@@ -80,7 +80,11 @@ namespace API_Calendario_CEC.Services
         public List<ReadDisciplinaDto> ListarDisciplinasPorPilar(string pilar)
         {
             List<Disciplina> disciplinas = _context.Disciplinas
-                .Where(disciplina => disciplina.Pilar.ToUpper() == pilar.ToUpper()).ToList();
+                .Where(disciplina =>
+                    disciplina.DeleteAt == null &&
+                    disciplina.Pilar.ToUpper() == pilar.ToUpper()
+                )
+                .ToList();
             if (disciplinas == null) return null;
             return _mapper.Map<List<ReadDisciplinaDto>>(disciplinas);
         }

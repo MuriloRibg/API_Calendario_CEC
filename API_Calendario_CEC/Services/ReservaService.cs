@@ -39,9 +39,10 @@ namespace API_Calendario_CEC.Services
             _localService = localService;
         }
 
-        public Result<Object> ListarReservas(string? data, string? pesquisa, int? page)
+        public Result<Object> ListarReservas(string? data=null, string? pesquisa=null, int? page=0, int? idTurma=0)
         {
             List<Reserva> reservas;
+            List<ReadReservaDto> reservasDto;
             int qtdTotalReservas;
             Object reservasPorPagina;
 
@@ -83,6 +84,12 @@ namespace API_Calendario_CEC.Services
 
                 qtdTotalReservas = reservas.Count();
             }
+            else if (idTurma != 0)
+            {
+                reservas = _context.innerJoinReservaAula("aulas", idTurma);
+
+                qtdTotalReservas = reservas.Count();
+            }
             else
             {
                 reservas = _context.Reservas.ToList();
@@ -94,7 +101,7 @@ namespace API_Calendario_CEC.Services
                 int pageSize = 6;
                 int currentPage = (page ?? 1);
 
-                List<ReadReservaDto> reservasDto = _mapper.Map<List<ReadReservaDto>>(reservas.ToPagedList(currentPage, pageSize));
+                reservasDto = _mapper.Map<List<ReadReservaDto>>(reservas.ToPagedList(currentPage, pageSize));
 
                 reservasPorPagina = (new
                 {
@@ -104,9 +111,10 @@ namespace API_Calendario_CEC.Services
                 return Result.Ok(reservasPorPagina);
             }
 
+            reservasDto = _mapper.Map<List<ReadReservaDto>>(reservas);
             reservasPorPagina = (new
             {
-                reservas,
+                reservasDto,
                 qtdTotalReservas
             });
 

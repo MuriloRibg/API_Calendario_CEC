@@ -28,6 +28,19 @@ namespace API_Calendario_CEC.Data
             return reserva;
         }
 
+        public List<Reserva> innerJoinReservaAula(string tabela, int? idTurma)
+        {
+            var reserva = Reservas
+                .FromSqlRaw("SELECT " +
+                "reserva.Id, Titulo, DataInicio, HoraInicio, HoraFim, Id_Local, a.Id as Id_evento, a.Id_Turma " +
+                "FROM Reservas AS reserva " +
+                $"INNER JOIN {tabela} AS a ON a.Id_Reserva = reserva.Id " +
+                $"WHERE a.Id_Turma = {idTurma}")
+                .ToListAsync()
+                .Result;
+            return reserva;
+        }
+
         public Reserva validaEvento(int? idEvento, string tabela, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
         {
             var reserva = Reservas

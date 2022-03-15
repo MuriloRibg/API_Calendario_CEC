@@ -22,9 +22,9 @@ namespace API_Calendario_CEC.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListaReservas([FromQuery] string data, [FromQuery]string pesquisa, [FromQuery]int page)
+        public IActionResult ListaReservas([FromQuery] string data=null, [FromQuery]string pesquisa=null, [FromQuery]int? page=0, [FromQuery] int? idTurma=0)
         {
-            Result<Object> reservasDto = _reservaService.ListarReservas(data, pesquisa, page);
+            Result<Object> reservasDto = _reservaService.ListarReservas(data, pesquisa, page, idTurma);
             if (reservasDto.IsFailed) return NotFound();
             return Ok(reservasDto.Value);
         }
