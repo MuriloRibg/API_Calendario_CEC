@@ -48,7 +48,7 @@ namespace API_Calendario_CEC.Services
             DateTime dataQuery;
             pesquisa = pesquisa?.ToLower();
 
-            if ((pesquisa != null || pesquisa != "") && data != null)
+            if (pesquisa != null && data != null)
             {
                 dataQuery = DateTime.Parse(data);
                 reservas = _context.Reservas
@@ -63,7 +63,7 @@ namespace API_Calendario_CEC.Services
 
                 qtdTotalReservas = reservas.Count();
             }
-            else if (pesquisa != null || pesquisa != "")
+            else if (pesquisa != null)
             {
                 reservas = _context.Reservas
                     .Where(r => 
