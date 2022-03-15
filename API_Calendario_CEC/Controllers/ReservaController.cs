@@ -5,6 +5,7 @@ using API_Calendario_CEC.Data.Request;
 using API_Calendario_CEC.Services;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace API_Calendario_CEC.Controllers
@@ -21,11 +22,11 @@ namespace API_Calendario_CEC.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListaReservas([FromQuery] string data)
+        public IActionResult ListaReservas([FromQuery] string data, [FromQuery]string pesquisa, [FromQuery]int page)
         {
-            List<ReadReservaDto> reservasDto = _reservaService.ListarReservas(data);
-            if (reservasDto == null) return NotFound();
-            return Ok(reservasDto);
+            Result<Object> reservasDto = _reservaService.ListarReservas(data, pesquisa, page);
+            if (reservasDto.IsFailed) return NotFound();
+            return Ok(reservasDto.Value);
         }
 
         [HttpGet]

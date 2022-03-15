@@ -7,6 +7,7 @@ using API_Calendario_CEC.Helps;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,12 @@ namespace API_Calendario_CEC.Services
     {
         private AppDbContext _context;
         private IMapper _mapper;
-        public List<FullCalendarRequest> fullCalendarRequests;
 
         //serviçõs utilizados para validação
         private InstrutorService _instrutorService;
         private TurmaService _turmaService;
         private DisciplinaService _disciplinaService;
         private LocalService _localService;
-
         private AulaService _aulaService;
         private EventoService _eventoService;
 
@@ -40,23 +39,50 @@ namespace API_Calendario_CEC.Services
             _localService = localService;
         }
 
-        public List<ReadReservaDto> ListarReservas(string? data)
+        public Result<Object> ListarReservas(string? data, string? pesquisa, int? page)
         {
             List<Reserva> reservas;
+            int qtdTotalReservas;
+
+            Object reservasPorPagina;
+
             if (data != null)
             {
-                Console.WriteLine(data);
                 DateTime dataQuery = DateTime.Parse(data);
                 reservas = _context.Reservas
                     .Where(r => r.DataInicio.Equals(dataQuery))
                     .ToList();
+
+                qtdTotalReservas = reservas.Count();
             }
             else
             {
                 reservas = _context.Reservas.ToList();
+                qtdTotalReservas = reservas.Count();
             }
-            
-            return _mapper.Map<List<ReadReservaDto>>(reservas);
+
+            if (reservas != null && page != null && page != 0)
+            {
+                int pageSize = 6;
+                int currentPage = (page ?? 1);
+
+                List<ReadReservaDto> reservasDto = _mapper.Map<List<ReadReservaDto>>(reservas.ToPagedList(currentPage, pageSize));
+
+                reservasPorPagina = (new
+                {
+                    reservasDto,
+                    qtdTotalReservas
+                });
+                return Result.Ok(reservasPorPagina);
+            }
+
+            reservasPorPagina = (new
+            {
+                reservas,
+                qtdTotalReservas
+            });
+
+            return Result.Ok(reservasPorPagina);
         }
 
         

@@ -6,7 +6,6 @@ using API_Calendario_CEC.Data.Dto;
 using API_Calendario_CEC.Models;
 using AutoMapper;
 using FluentResults;
-
 using PagedList;
 
 namespace API_Calendario_CEC.Services
