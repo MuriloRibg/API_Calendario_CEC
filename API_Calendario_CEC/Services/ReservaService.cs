@@ -43,12 +43,40 @@ namespace API_Calendario_CEC.Services
         {
             List<Reserva> reservas;
             int qtdTotalReservas;
-
             Object reservasPorPagina;
 
-            if (data != null)
+            DateTime dataQuery;
+            pesquisa = pesquisa?.ToLower();
+
+            if (pesquisa != null && data != null)
             {
-                DateTime dataQuery = DateTime.Parse(data);
+                dataQuery = DateTime.Parse(data);
+                reservas = _context.Reservas
+                    .Where(r => 
+                        r.DataInicio.Equals(dataQuery) &&
+                        (
+                            r.Titulo.ToLower().Contains(pesquisa) ||
+                            r.Local.Nome.ToLower().Contains(pesquisa)
+                        )
+                    )
+                    .ToList();
+
+                qtdTotalReservas = reservas.Count();
+            }
+            else if (pesquisa != null)
+            {
+                reservas = _context.Reservas
+                    .Where(r => 
+                        r.Titulo.ToLower().Contains(pesquisa) ||
+                        r.Local.Nome.ToLower().Contains(pesquisa)
+                    )
+                    .ToList();
+
+                qtdTotalReservas = reservas.Count();
+            }
+            else if (data != null)
+            {
+                dataQuery = DateTime.Parse(data);
                 reservas = _context.Reservas
                     .Where(r => r.DataInicio.Equals(dataQuery))
                     .ToList();
