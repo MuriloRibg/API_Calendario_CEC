@@ -64,6 +64,15 @@ namespace API_Calendario_CEC.Services
 
                 qtdTotalReservas = reservas.Count();
             }
+            else if (idTurma != 0 && data != null)
+            {
+                dataQuery = DateTime.Parse(data);
+                reservas = _context.innerJoinReservaAula("aulas", idTurma)
+                            .Where(r => r.DataInicio.Equals(dataQuery))
+                            .ToList();
+
+                qtdTotalReservas = reservas.Count();
+            }
             else if (pesquisa != null)
             {
                 reservas = _context.Reservas
@@ -75,18 +84,18 @@ namespace API_Calendario_CEC.Services
 
                 qtdTotalReservas = reservas.Count();
             }
+            else if (idTurma != 0)
+            {
+                reservas = _context.innerJoinReservaAula("aulas", idTurma);
+
+                qtdTotalReservas = reservas.Count();
+            }
             else if (data != null)
             {
                 dataQuery = DateTime.Parse(data);
                 reservas = _context.Reservas
                     .Where(r => r.DataInicio.Equals(dataQuery))
                     .ToList();
-
-                qtdTotalReservas = reservas.Count();
-            }
-            else if (idTurma != 0)
-            {
-                reservas = _context.innerJoinReservaAula("aulas", idTurma);
 
                 qtdTotalReservas = reservas.Count();
             }
