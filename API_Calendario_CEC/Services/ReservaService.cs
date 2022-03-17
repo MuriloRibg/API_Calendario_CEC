@@ -189,6 +189,17 @@ namespace API_Calendario_CEC.Services
 
             List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
 
+            Reserva validaLocal = _context
+                .validaReservaSemJoin(
+                    id,
+                    "Id_local",
+                    reservaUpdate.Id_Local,
+                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"),
+                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                );
+
+            validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+
             Reserva reserva = _context.Reservas.FirstOrDefault(reserva => reserva.Id == id);
             
             if (reserva == null) {
@@ -207,17 +218,7 @@ namespace API_Calendario_CEC.Services
                    reservaUpdate.Descricao
                 );
 
-                Reserva validaLocalAula = _context
-                    .validaEvento(
-                        id,
-                        "aulas",
-                        "Id_local",
-                        reservaUpdate.Id_Local,
-                        reservaUpdate.DataInicio.ToString("yyyy-MM-dd"),
-                        reservaUpdate.HoraInicio, reservaUpdate.HoraFim
-                    );
-
-                Reserva validaInstrutor = _context.validaEvento(
+                Reserva validaInstrutor = _context.validaReservaComJoin(
                     id, 
                     "aulas", 
                     "Id_instrutor", 
@@ -226,7 +227,7 @@ namespace API_Calendario_CEC.Services
                     reservaUpdate.HoraInicio, reservaUpdate.HoraFim
                 );
 
-                Reserva validaTurma = _context.validaEvento(
+                Reserva validaTurma = _context.validaReservaComJoin(
                     id,
                     "aulas",
                     "Id_turma",
@@ -235,7 +236,6 @@ namespace API_Calendario_CEC.Services
                     reservaUpdate.HoraInicio, reservaUpdate.HoraFim
                 );
 
-                validacao.Add(new ValidacaoRequest(validaLocalAula != null, "Local ocupado neste horário"));
                 validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
                 validacao.Add(new ValidacaoRequest(validaTurma != null, "Turma ocupada neste horário"));
 
@@ -258,20 +258,9 @@ namespace API_Calendario_CEC.Services
             {
                 UpdateEventoDto eventoDto = new UpdateEventoDto(
                     reservaUpdate.Id_Instrutor,
-                    reservaUpdate.Id_Evento
+                    reservaUpdate.Id_Evento,
+                    reservaUpdate.Descricao
                 );
-
-                Reserva validaLocalEvento = _context
-                .validaEvento(
-                    id,
-                    "eventos",
-                    "Id_local",
-                    reservaUpdate.Id_Local,
-                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"),
-                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
-                );
-
-                validacao.Add(new ValidacaoRequest(validaLocalEvento != null, "Local ocupado neste horário"));
 
                 List<string> erros = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
 
@@ -308,6 +297,16 @@ namespace API_Calendario_CEC.Services
 
             List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
 
+            Reserva validaLocal = _context
+                  .validaReservaSemJoin(
+                      0,
+                      "Id_local",
+                      createReservaDto.Id_Local,
+                      createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
+                      createReservaDto.HoraInicio, createReservaDto.HoraFim
+                  );
+            validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
+
             //verifica se local existe
             bool local = _localService.RecuperarLocalPorId(createReservaDto.Id_Local) == null;    
             validacao.Add(new ValidacaoRequest(local, "Local não existe"));
@@ -318,17 +317,8 @@ namespace API_Calendario_CEC.Services
 
             if (createReservaDto.TipoEvento.ToLower() == "aula")
             {
-                Reserva validaLocal = _context
-               .validaEvento(
-                   0,
-                   "aulas",
-                   "Id_local",
-                   createReservaDto.Id_Local,
-                   createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
-                   createReservaDto.HoraInicio, createReservaDto.HoraFim
-               );
                 Reserva validaTurma = _context
-                .validaEvento(
+                .validaReservaComJoin(
                     0,
                     "aulas",
                     "Id_turma",
@@ -337,7 +327,7 @@ namespace API_Calendario_CEC.Services
                     createReservaDto.HoraInicio, createReservaDto.HoraFim
                 );
                 Reserva validaInstrutor = _context
-                .validaEvento(
+                .validaReservaComJoin(
                     0,
                     "aulas",
                     "Id_instrutor",
@@ -380,16 +370,6 @@ namespace API_Calendario_CEC.Services
             }
             else if(createReservaDto.TipoEvento.ToLower() == "evento")
             {
-                Reserva validaLocal = _context
-                  .validaEvento(
-                      0,
-                      "eventos",
-                      "Id_local",
-                      createReservaDto.Id_Local,
-                      createReservaDto.DataInicio.ToString("yyyy-MM-dd"),
-                      createReservaDto.HoraInicio, createReservaDto.HoraFim
-                  );
-                validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
 
                 List<string> erros = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
 

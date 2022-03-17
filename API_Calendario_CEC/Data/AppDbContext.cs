@@ -12,7 +12,7 @@ namespace API_Calendario_CEC.Data
         {
         }
 
-        public Reserva validaReserva(int? idEvento, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
+        public Reserva validaReservaSemJoin(int? idEvento, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
         {
             var reserva = Reservas
                 .FromSqlRaw("SELECT * " +
@@ -41,7 +41,7 @@ namespace API_Calendario_CEC.Data
             return reserva;
         }
 
-        public Reserva validaEvento(int? idEvento, string tabela, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
+        public Reserva validaReservaComJoin(int? idEvento, string tabela, string nomeColuna,int idColuna ,string data, string horaInicio, string horaFim)
         {
             var reserva = Reservas
                 .FromSqlRaw("SELECT " +
