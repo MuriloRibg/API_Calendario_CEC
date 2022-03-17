@@ -48,6 +48,7 @@ namespace API_Calendario_CEC.Services
             if (pesquisa == null || pesquisa == "")
             {
                 instrutores = _context.Instrutores
+                    .OrderBy(instrutor => instrutor.Nome)
                     .Where(instrutor => instrutor.DeleteAt == null)
                     .ToList();
             }
@@ -56,6 +57,7 @@ namespace API_Calendario_CEC.Services
                 pesquisa = pesquisa.ToLower();
             
                 instrutores = _context.Instrutores
+                    .OrderBy(instrutor => instrutor.Nome)
                     .Where(instrutor =>
                         instrutor.DeleteAt == null &&
                         (
@@ -90,6 +92,7 @@ namespace API_Calendario_CEC.Services
 
         public List<ReadInstrutorDto> ListarInstrutorPorPilar(string pilar) {
             List<Instrutor> instrutores = _context.Instrutores
+                .OrderBy(instrutor => instrutor.Nome)
                 .Where(instrutor => instrutor.DeleteAt == null &&
                     instrutor.Pilar.ToUpper() == pilar.ToUpper())
                 .ToList();
@@ -134,6 +137,7 @@ namespace API_Calendario_CEC.Services
             if (instrutor == null) return Result.Fail("Instrutor não encontrado");
             _mapper.Map(updateInstrutorDto, instrutor); //Atualizando o instrutor;
             _context.SaveChanges();
+            
             return Result.Ok().WithSuccess("Instrutor atualizado com sucesso!");
         }
 
@@ -146,7 +150,7 @@ namespace API_Calendario_CEC.Services
             if (instrutor == null) return Result.Fail("Instrutor não encontrado!");
             instrutor.DeleteAt = DateTime.Now;
             _context.SaveChanges();
-            return Result.Ok().WithSuccess("Instrutor apagado com sucesso!");
+            return Result.Ok().WithSuccess("Instrutor arquivado com sucesso!");
         }
 
         //PUT restaurar

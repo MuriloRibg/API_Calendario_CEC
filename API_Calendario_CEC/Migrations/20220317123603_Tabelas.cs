@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace API_Calendario_CEC.Migrations
 {
-    public partial class Tabela : Migration
+    public partial class Tabelas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,8 +81,8 @@ namespace API_Calendario_CEC.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Titulo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     DataInicio = table.Column<DateTime>(type: "date", nullable: false),
-                    HoraInicio = table.Column<string>(type: "text", nullable: false),
-                    HoraFim = table.Column<string>(type: "text", nullable: false),
+                    HoraInicio = table.Column<string>(type: "time", nullable: false),
+                    HoraFim = table.Column<string>(type: "time", nullable: false),
                     Id_Local = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -154,7 +154,8 @@ namespace API_Calendario_CEC.Migrations
                     Id_Instrutor = table.Column<int>(type: "int", nullable: false),
                     Id_Turma = table.Column<int>(type: "int", nullable: false),
                     Id_Disciplina = table.Column<int>(type: "int", nullable: false),
-                    Id_Reserva = table.Column<int>(type: "int", nullable: false)
+                    Id_Reserva = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

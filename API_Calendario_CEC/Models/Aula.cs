@@ -28,5 +28,7 @@ namespace API_Calendario_CEC.Models
         public int Id_Reserva { get; set; }
 
         public virtual Reserva Reserva { get; set; }
+
+        public string? Descricao { get; set; }
     }
 }

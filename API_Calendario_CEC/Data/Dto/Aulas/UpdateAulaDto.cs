@@ -16,12 +16,15 @@ namespace API_Calendario_CEC.Data.Dto.Aulas
         [Required(ErrorMessage = "O campo Id_Disciplina é obrigatório!")]
         public int Id_Disciplina { get; set; }
 
-        public UpdateAulaDto(int id, int id_Instrutor, int id_Turma, int id_Disciplina)
+        public string? Descricao { get; set; }
+
+        public UpdateAulaDto(int id, int id_Instrutor, int id_Turma, int id_Disciplina, string descricao)
         {
             Id = id;
             Id_Instrutor = id_Instrutor;
             Id_Turma = id_Turma;
             Id_Disciplina = id_Disciplina;
+            Descricao = descricao;
         }
 
     }

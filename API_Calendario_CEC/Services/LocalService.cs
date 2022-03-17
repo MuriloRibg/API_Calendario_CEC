@@ -46,12 +46,14 @@ namespace API_Calendario_CEC.Services {
             if (pesquisa == null || pesquisa == "")
             {
                 locais = _context.Locais
+                    .OrderBy(local => local.Nome)
                     .Where(local => local.DeleteAt == null)
                     .ToList();
             }
             else
             {
                 locais = _context.Locais
+                    .OrderBy(local => local.Nome)
                     .Where(local => local.DeleteAt == null && 
                         (
                             local.Capacidade.ToString().Contains(pesquisa) ||
@@ -72,7 +74,10 @@ namespace API_Calendario_CEC.Services {
         public List<ReadLocaisDto> RecuperarLocalPorQuantidade(int qtd_alunos)
         {
             List<Local> local = _context.Locais
-                .Where(local => local.DeleteAt == null && local.Capacidade >= qtd_alunos).ToList();
+                .OrderBy(local => local.Nome)
+                .Where(local => local.DeleteAt == null &&
+                    local.Capacidade >= qtd_alunos).ToList();
+
             if (local == null) return null;
             return _mapper.Map<List<ReadLocaisDto>>(local);
         }
