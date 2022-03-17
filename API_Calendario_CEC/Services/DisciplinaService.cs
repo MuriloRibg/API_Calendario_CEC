@@ -44,6 +44,7 @@ namespace API_Calendario_CEC.Services
             if (pesquisa == null || pesquisa == "")
             {
                 disciplinas = _context.Disciplinas
+                    .OrderBy(disciplina => disciplina.Nome)
                     .Where(disciplina => disciplina.DeleteAt == null)
                     .ToList();
                 
@@ -52,6 +53,7 @@ namespace API_Calendario_CEC.Services
                 pesquisa = pesquisa.ToLower();
 
                 disciplinas = _context.Disciplinas
+                    .OrderBy(disciplina => disciplina.Nome)
                     .Where(disciplina =>
                         disciplina.Nome.Contains(pesquisa) ||
                         disciplina.Pilar.Contains(pesquisa)
@@ -80,6 +82,7 @@ namespace API_Calendario_CEC.Services
         public List<ReadDisciplinaDto> ListarDisciplinasPorPilar(string pilar)
         {
             List<Disciplina> disciplinas = _context.Disciplinas
+                .OrderBy(disciplina => disciplina.Nome)
                 .Where(disciplina =>
                     disciplina.DeleteAt == null &&
                     disciplina.Pilar.ToUpper() == pilar.ToUpper()

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Calendario_CEC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220309152912_Tabela")]
-    partial class Tabela
+    [Migration("20220317174737_Tabelas")]
+    partial class Tabelas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,9 @@ namespace API_Calendario_CEC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text");
 
                     b.Property<int>("Id_Disciplina")
                         .HasColumnType("int");
@@ -80,7 +83,6 @@ namespace API_Calendario_CEC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Id_Instrutor")
@@ -195,11 +197,11 @@ namespace API_Calendario_CEC.Migrations
 
                     b.Property<string>("HoraFim")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("time");
 
                     b.Property<string>("HoraInicio")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("time");
 
                     b.Property<int>("Id_Local")
                         .HasColumnType("int");

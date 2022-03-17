@@ -45,6 +45,7 @@ namespace API_Calendario_CEC.Services
             if (pesquisa == null || pesquisa == "")
             {
                 turmas = _context.Turmas
+                    .OrderBy(turma => turma.Nome)
                     .Where(turma => turma.DeleteAt == null)
                     .ToList();
             }
@@ -53,6 +54,7 @@ namespace API_Calendario_CEC.Services
                 pesquisa = pesquisa.ToLower();
                 
                 turmas = _context.Turmas
+                    .OrderBy(turma => turma.Nome)
                     .Where(turma =>
                         turma.DeleteAt == null &&
                         (
@@ -83,6 +85,7 @@ namespace API_Calendario_CEC.Services
 
         public List<ReadTurmasDto> ListarTurmaPorPilar(string? pilar) {
             List<Turma> turmas = _context.Turmas
+                .OrderBy(turma => turma.Nome)
                 .Where(turma => turma.DeleteAt == null &&
                     turma.Pilar.NomePilar.ToUpper() == pilar.ToUpper())
                 .ToList();
@@ -119,7 +122,7 @@ namespace API_Calendario_CEC.Services
         //PUT
         public Result AtualizarTurma(int id, UpdateTurmasDto updateTurmaDto)
         {
-            Turma turmaCadastrado = verificaNomeTurma(_mapper.Map<Turma>(updateTurmaDto));
+            Turma turmaCadastrado = verificaNomeTurma(_mapper.Map<Turma>(updateTurmaDto), id);
             if(turmaCadastrado != null) return Result.Fail($"Turma {turmaCadastrado.Nome} já cadastrada");
 
             Turma turma = _context.Turmas
@@ -155,11 +158,11 @@ namespace API_Calendario_CEC.Services
             return Result.Ok().WithSuccess("Turma restaurado com sucesso!");
         }
 
-        private Turma verificaNomeTurma(Turma turmaCadastro)
+        private Turma verificaNomeTurma(Turma turma, int id = 0)
         {
             Turma turmaCadastrado = _context
                 .Turmas
-                .FirstOrDefault(turma => turma.Nome.ToUpper() == turmaCadastro.Nome.ToUpper());
+                .FirstOrDefault(turmaDto => turmaDto.Id != id && turmaDto.Nome.ToUpper() == turma.Nome.ToUpper());
             return turmaCadastrado;
         }
     }

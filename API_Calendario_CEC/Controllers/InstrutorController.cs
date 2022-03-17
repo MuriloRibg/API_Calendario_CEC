@@ -42,10 +42,10 @@ namespace API_Calendario_CEC.Controllers
         [HttpGet("pilar")]
         public IActionResult ListarInstrutoresPorPilar([FromQuery] string pilar)
         {
-            List<ReadInstrutorDto> instrutoresPorPilar = _instrutorService.ListarInstrutorPorPilar(pilar);
-            if (instrutoresPorPilar == null) return NotFound();
+            List<ReadInstrutorDto> instrutores = _instrutorService.ListarInstrutorPorPilar(pilar);
+            if (instrutores == null) return NotFound();
 
-            return Ok(instrutoresPorPilar);
+            return Ok(instrutores);
         }
 
         [HttpGet("{id}")]

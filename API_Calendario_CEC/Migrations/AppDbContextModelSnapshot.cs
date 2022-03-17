@@ -23,6 +23,9 @@ namespace API_Calendario_CEC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text");
+
                     b.Property<int>("Id_Disciplina")
                         .HasColumnType("int");
 
@@ -192,11 +195,11 @@ namespace API_Calendario_CEC.Migrations
 
                     b.Property<string>("HoraFim")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("time");
 
                     b.Property<string>("HoraInicio")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("time");
 
                     b.Property<int>("Id_Local")
                         .HasColumnType("int");

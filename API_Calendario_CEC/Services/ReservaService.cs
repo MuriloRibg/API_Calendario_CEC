@@ -134,19 +134,44 @@ namespace API_Calendario_CEC.Services
 
         public List<FullCalendarRequest> ListarReservasCalendario()
         {
-            List<Reserva> reservas = _context.Reservas.ToList();
+            List<Aula> aulas = _context.Aulas.ToList();
             List<FullCalendarRequest> fullCalendar= new List<FullCalendarRequest>();
 
-            foreach (Reserva reserva in reservas)
+            foreach (Aula aula in aulas)
             {
-                string data = reserva.DataInicio.ToString("yyyy-MM-dd");
-                string start = data + "T" + reserva.HoraInicio;
-                string end = data + "T" + reserva.HoraFim;
-                string cor = reserva.Aula != null ? reserva.Aula.Turma.Pilar.Cor : ""; ;
+                string data = aula.Reserva.DataInicio.ToString("yyyy-MM-dd");
+                string start = data + "T" + aula.Reserva.HoraInicio;
+                string end = data + "T" + aula.Reserva.HoraFim;
+                string cor = aula.Turma.Pilar.Cor;
 
-                fullCalendar.Add(new FullCalendarRequest(reserva.Titulo, start, end, cor));
+                fullCalendar.Add(new FullCalendarRequest(
+                    aula.Reserva.Titulo, start, end, cor,
+                    aula.Descricao,
+                    aula.Instrutor.Nome,
+                    aula.Reserva.Local.Nome,
+                    aula.Turma.Nome,
+                    aula.Disciplina.Nome
+                ));
             }
+
+            List<Evento> eventos = _context.Eventos.ToList();
+
+            foreach (Evento evento in eventos)
+            {
+                string data = evento.Reserva.DataInicio.ToString("yyyy-MM-dd");
+                string start = data + "T" + evento.Reserva.HoraInicio;
+                string end = data + "T" + evento.Reserva.HoraFim;
+                string cor = "";
+
+                fullCalendar.Add(new FullCalendarRequest(
+                    evento.Reserva.Titulo, start, end, cor,
+                    evento.Descricao, evento.Instrutor.Nome, evento.Reserva.Local.Nome
+                    ));
+            }
+
             return fullCalendar;
+
+
         }
 
         public Result AtualizaReserva(UpdateReservaDto reservaUpdate, int id)
@@ -178,7 +203,8 @@ namespace API_Calendario_CEC.Services
                    reservaUpdate.Id_Aula,
                    reservaUpdate.Id_Instrutor,
                    reservaUpdate.Id_Turma,
-                   reservaUpdate.Id_Disciplina
+                   reservaUpdate.Id_Disciplina,
+                   reservaUpdate.Descricao
                 );
 
                 Reserva validaLocalAula = _context
@@ -344,6 +370,7 @@ namespace API_Calendario_CEC.Services
                    createReservaDto.Id_Instrutor,
                    createReservaDto.Id_Turma,
                    createReservaDto.Id_Disciplina,
+                   createReservaDto.Descricao,
                    reserva.Id
                 );
 
