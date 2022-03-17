@@ -15,8 +15,6 @@ namespace API_Calendario_CEC.Models
 
         [Required(ErrorMessage = "O campo Id_Reserva é obrigatório!")]
         public int Id_Reserva { get; set; }
-
-        [Required(ErrorMessage = "O campo Descricao é obrigatório!")]
         public string Descricao { get; set; }
         public virtual Reserva Reserva { get; set; }
         public virtual Instrutor Instrutor { get; set; }

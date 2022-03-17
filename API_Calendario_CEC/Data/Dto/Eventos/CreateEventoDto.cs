@@ -16,8 +16,6 @@ namespace API_Calendario_CEC.Data.Dto.Eventos
 
         [Required(ErrorMessage = "O campo Id_Reserva é obrigatório!")]
         public int Id_Reserva { get; set; }
-
-        [Required(ErrorMessage = "O campo Descrição é obrigatório!")]
         public string Descricao { get; set; }
     }
 }

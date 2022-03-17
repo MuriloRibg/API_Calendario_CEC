@@ -126,7 +126,7 @@ namespace API_Calendario_CEC.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Id_Instrutor = table.Column<int>(type: "int", nullable: false),
                     Id_Reserva = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "text", nullable: false)
+                    Descricao = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

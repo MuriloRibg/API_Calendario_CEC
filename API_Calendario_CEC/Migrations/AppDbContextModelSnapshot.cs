@@ -78,7 +78,6 @@ namespace API_Calendario_CEC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Id_Instrutor")
