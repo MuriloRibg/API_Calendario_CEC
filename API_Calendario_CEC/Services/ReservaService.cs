@@ -161,19 +161,8 @@ namespace API_Calendario_CEC.Services
                 return Result.Fail("Hora inicio é maior que hora fim!");
             }
 
-            Reserva validaLocal = _context
-                .validaEvento(
-                    id, 
-                    "aulas", 
-                    "Id_local", 
-                    reservaUpdate.Id_Local,
-                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"), 
-                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
-                );
 
             List<ValidacaoRequest> validacao = new List<ValidacaoRequest>();
-
-            validacao.Add(new ValidacaoRequest(validaLocal != null, "Local ocupado neste horário"));
 
             Reserva reserva = _context.Reservas.FirstOrDefault(reserva => reserva.Id == id);
             
@@ -191,7 +180,17 @@ namespace API_Calendario_CEC.Services
                    reservaUpdate.Id_Turma,
                    reservaUpdate.Id_Disciplina
                 );
-                
+
+                Reserva validaLocalAula = _context
+                    .validaEvento(
+                        id,
+                        "aulas",
+                        "Id_local",
+                        reservaUpdate.Id_Local,
+                        reservaUpdate.DataInicio.ToString("yyyy-MM-dd"),
+                        reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                    );
+
                 Reserva validaInstrutor = _context.validaEvento(
                     id, 
                     "aulas", 
@@ -210,6 +209,7 @@ namespace API_Calendario_CEC.Services
                     reservaUpdate.HoraInicio, reservaUpdate.HoraFim
                 );
 
+                validacao.Add(new ValidacaoRequest(validaLocalAula != null, "Local ocupado neste horário"));
                 validacao.Add(new ValidacaoRequest(validaInstrutor != null, "Instrutor ocupado neste horário"));
                 validacao.Add(new ValidacaoRequest(validaTurma != null, "Turma ocupada neste horário"));
 
@@ -227,9 +227,41 @@ namespace API_Calendario_CEC.Services
                 if (resultado.IsFailed) {
                     return Result.Fail("Aula não encontrada!");
                 }
-            }else if (reservaUpdate.TipoEvento.ToLower() == "evento")
+            }
+            else if (reservaUpdate.TipoEvento.ToLower() == "evento")
             {
+                UpdateEventoDto eventoDto = new UpdateEventoDto(
+                    reservaUpdate.Id_Instrutor,
+                    reservaUpdate.Id_Evento
+                );
 
+                Reserva validaLocalEvento = _context
+                .validaEvento(
+                    id,
+                    "eventos",
+                    "Id_local",
+                    reservaUpdate.Id_Local,
+                    reservaUpdate.DataInicio.ToString("yyyy-MM-dd"),
+                    reservaUpdate.HoraInicio, reservaUpdate.HoraFim
+                );
+
+                validacao.Add(new ValidacaoRequest(validaLocalEvento != null, "Local ocupado neste horário"));
+
+                List<string> erros = validacao.FindAll(e => e.Validacao == true).Select(e => e.Message).ToList();
+
+                if (erros.Count != 0)
+                {
+                    return Result.Ok().WithErrors(erros);
+                }
+
+                //salva a reserva antes de começar a atualiza a aula relacionada
+                _context.SaveChanges();
+
+                Result resultado = _eventoService.AtualizaEvento(eventoDto, eventoDto.Id);
+                if (resultado.IsFailed)
+                {
+                    return Result.Fail("Evento não encontrada!");
+                }
 
             }
 

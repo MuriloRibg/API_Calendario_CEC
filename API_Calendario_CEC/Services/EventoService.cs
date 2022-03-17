@@ -33,6 +33,21 @@ namespace API_Calendario_CEC.Services
             return _mapper.Map<ReadEventoDto>(evento);
         }
 
+        public Result AtualizaEvento(UpdateEventoDto updateEventoDto, int idEvento)
+        {
+            Evento evento = _context.Eventos.FirstOrDefault(evento => evento.Id == idEvento);
+
+            if (evento == null)
+            {
+                return Result.Fail("Evento não encontrada!");
+            }
+
+            _mapper.Map(updateEventoDto, evento);
+            _context.SaveChanges();
+
+            return Result.Ok();
+        }
+
         public Result DeletaEvento(int idReserva)
         {
             Evento evento = _context.Eventos
