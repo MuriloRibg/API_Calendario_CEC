@@ -26,6 +26,5 @@ namespace API_Calendario_CEC.Data.Dto.Aulas
             Id_Disciplina = id_Disciplina;
             Descricao = descricao;
         }
-
     }
 }
