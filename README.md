@@ -1,4 +1,3 @@
-# API_Calendario_CEC
 # **API_Calendario_CEC C# with .Net Core 5.0** ![Bafge](https://img.shields.io/badge/Version-1.0.0-green) ![Bafge](https://img.shields.io/badge/.NetCore-5.0.0-blue)
 
 <h4 align="center"> 
